@@ -1,0 +1,20 @@
+git-for-kids
+============
+
+This project builds on open source work. Full credit and thanks:
+
+1. learnGitBranching -- https://github.com/pcottle/learnGitBranching
+   Copyright (c) 2012-2025 Peter Cottle
+   Licensed under the MIT License.
+
+   We use its level definitions (start trees, goal trees, official solution
+   commands, hints and lesson dialogs) for all 36 base levels, imported by
+   scripts/import-levels.mjs into data/levels.json. The git engine in this
+   repo is an independent TypeScript implementation, verified against those
+   original levels' solution commands for behavioral parity.
+
+   The MIT license text is reproduced in full in licenses/learnGitBranching-MIT.txt
+
+2. Kenney game assets -- https://kenney.nl
+   Released into the public domain under CC0 1.0 Universal.
+   Attribution is not required; we give it gladly.
