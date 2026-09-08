@@ -183,6 +183,18 @@ body {
   display: block;
   margin: 0 auto;
 }
+/* The stage is a scene, not a diagram -- give it room, and let it pan. */
+.gfk-graph-panel .gfk-graph-scroll {
+  min-height: 340px;
+  max-height: min(66vh, 620px);
+  display: flex;
+  /* `safe` matters: plain centring makes the top of a world taller than the
+     panel unreachable, because overflow scrolls only in one direction from a
+     centred flex item. */
+  align-items: safe center;
+  justify-content: safe center;
+  overflow: auto;
+}
 
 /* --- terminal ------------------------------------------------------------ */
 
@@ -703,4 +715,90 @@ a {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Character animation.
+
+   Poses pivot at the feet (transform-box: fill-box + bottom origin) so a
+   character never slides off the platform it is standing on.
+   --------------------------------------------------------------------------- */
+
+.gfk-sprite {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+/* Breathing, so the world never looks frozen. */
+.gfk-sprite-idle {
+  animation: gfk-bob 2.4s ease-in-out infinite;
+}
+@keyframes gfk-bob {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50%      { transform: translateY(-2px) scaleY(1.02); }
+}
+
+/* git commit -- wind up, then drive forward to forge a platform. */
+.gfk-sprite-strike {
+  animation: gfk-strike 520ms ease-out;
+}
+@keyframes gfk-strike {
+  0%   { transform: translateX(0) rotate(0deg); }
+  25%  { transform: translateX(-4px) rotate(-8deg); }
+  55%  { transform: translateX(7px) rotate(10deg) scaleY(0.94); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* checkout / rebase -- a real jump across the world. */
+.gfk-sprite-leap {
+  animation: gfk-leap 560ms cubic-bezier(0.3, -0.4, 0.4, 1.4);
+}
+@keyframes gfk-leap {
+  0%   { transform: translateY(0) scaleY(0.86) scaleX(1.1); }
+  35%  { transform: translateY(-22px) scaleY(1.12) scaleX(0.92); }
+  70%  { transform: translateY(0) scaleY(0.9) scaleX(1.08); }
+  100% { transform: translateY(0) scaleY(1) scaleX(1); }
+}
+
+/* merge / push / pull -- gathering power. */
+.gfk-sprite-cast {
+  animation: gfk-cast 620ms ease-in-out;
+}
+@keyframes gfk-cast {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.14) translateY(-6px); }
+  100% { transform: scale(1); }
+}
+
+/* A rejected command knocks the hero back. */
+.gfk-sprite-hurt {
+  animation: gfk-hurt 460ms ease-out;
+}
+@keyframes gfk-hurt {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20%      { transform: translateX(-6px) rotate(-12deg); }
+  45%      { transform: translateX(5px) rotate(9deg); }
+  70%      { transform: translateX(-3px) rotate(-5deg); }
+}
+
+.gfk-sprite-cheer {
+  animation: gfk-cheer 700ms ease-out infinite;
+}
+@keyframes gfk-cheer {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30%      { transform: translateY(-14px) scaleY(1.08); }
+  60%      { transform: translateY(0) scaleY(0.92); }
+}
+
+/* The whole world reacts when a command is refused. */
+.gfk-world-hurt {
+  animation: gfk-shake 380ms ease-out;
+}
+@keyframes gfk-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(7px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(2px); }
 }

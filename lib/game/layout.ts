@@ -51,10 +51,16 @@ export interface GraphLayout {
   height: number;
 }
 
-export const COL_WIDTH = 92;
-export const ROW_HEIGHT = 78;
-const PAD_X = 60;
-const PAD_Y = 56;
+/**
+ * Two spacings. The stage reserves room for a character plus a nameplate
+ * standing on every platform; the compact spacing is for the goal preview and
+ * lesson demos, which show the shape of the tree without the cast.
+ */
+const STAGE = { col: 132, row: 158, padX: 86, padY: 120 };
+const COMPACT = { col: 84, row: 74, padX: 52, padY: 46 };
+
+export const COL_WIDTH = STAGE.col;
+export const ROW_HEIGHT = STAGE.row;
 
 /** Longest distance from a root, so a child never sits above its parent. */
 function computeDepths(tree: Tree): Map<string, number> {
@@ -95,7 +101,11 @@ function orderedBranchNames(tree: Tree): string[] {
   return names.sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
 }
 
-export function layoutTree(tree: Tree): GraphLayout {
+export function layoutTree(
+  tree: Tree,
+  options: { compact?: boolean } = {},
+): GraphLayout {
+  const { col, row, padX, padY } = options.compact ? COMPACT : STAGE;
   const depths = computeDepths(tree);
   const maxDepth = Math.max(0, ...depths.values());
   const lanes = new Map<string, number>();
@@ -128,8 +138,8 @@ export function layoutTree(tree: Tree): GraphLayout {
     ? tree.branches[tree.HEAD.target].target
     : tree.HEAD.target;
 
-  const xOf = (id: string) => PAD_X + (lanes.get(id) ?? 0) * COL_WIDTH;
-  const yOf = (id: string) => PAD_Y + (maxDepth - (depths.get(id) ?? 0)) * ROW_HEIGHT;
+  const xOf = (id: string) => padX + (lanes.get(id) ?? 0) * col;
+  const yOf = (id: string) => padY + (maxDepth - (depths.get(id) ?? 0)) * row;
 
   const commits: LaidOutCommit[] = Object.keys(tree.commits).map((id) => ({
     id,
@@ -213,7 +223,7 @@ export function layoutTree(tree: Tree): GraphLayout {
     commits,
     edges,
     labels,
-    width: PAD_X * 2 + Math.max(1, nextLane) * COL_WIDTH,
-    height: PAD_Y * 2 + (maxDepth + 1) * ROW_HEIGHT,
+    width: padX * 2 + Math.max(1, nextLane) * col,
+    height: padY * 2 + (maxDepth + 1) * row,
   };
 }

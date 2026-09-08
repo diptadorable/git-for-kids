@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useGame } from '@/components/GameProvider';
 import { CommitGraph } from './CommitGraph';
@@ -19,6 +19,7 @@ import {
   type SessionState,
 } from '@/lib/game/session';
 import { localizedLevel } from '@/lib/game/content';
+import { poseForCommand, type Pose } from '@/lib/game/characters';
 
 export function LevelPlayer({
   level,
@@ -35,34 +36,66 @@ export function LevelPlayer({
   const [showGoal, setShowGoal] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
+  const [pose, setPose] = useState<Pose>('idle');
+  const [shaking, setShaking] = useState(false);
+  const poseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Actions are momentary; drop back to idle so the world keeps breathing.
+  useEffect(() => {
+    if (pose === 'idle' || pose === 'cheer') return;
+    if (poseTimer.current) clearTimeout(poseTimer.current);
+    poseTimer.current = setTimeout(() => setPose('idle'), 700);
+    return () => {
+      if (poseTimer.current) clearTimeout(poseTimer.current);
+    };
+  }, [pose]);
+
+  useEffect(() => {
+    if (!shaking) return;
+    const timer = setTimeout(() => setShaking(false), 400);
+    return () => clearTimeout(timer);
+  }, [shaking]);
 
   // No reset effect here on purpose: the page mounts this with key={level.id},
   // so moving to another level remounts with fresh state. That is React's
   // documented way to reset state on a prop change.
 
-  const run = (line: string) => {
-    if (line === 'reset') return setSession((s) => resetLevel(level, s));
-    if (line === 'undo') return setSession((s) => undo(s));
+  /** Turn a command result into what the player sees the hero do. */
+  const react = (state: SessionState, justSolved: boolean, action: Pose) => {
+    setSession(state);
+    const failed = state.log[state.log.length - 1]?.kind === 'error';
 
-    setSession((current) => {
-      const { state, justSolved } = applyCommand(level, current, line);
-      if (justSolved) {
-        markSolved(level.id, state.commandCount);
-        setCelebrating(true);
-      }
-      return state;
-    });
+    if (justSolved) {
+      markSolved(level.id, state.commandCount);
+      setCelebrating(true);
+      setPose('cheer');
+    } else if (failed) {
+      // A rejected command is an enemy blocking the way, not a silent no-op.
+      setPose('hurt');
+      setShaking(true);
+    } else {
+      setPose(action);
+    }
+  };
+
+  const run = (line: string) => {
+    if (line === 'reset') {
+      setSession(resetLevel(level, session));
+      setPose('idle');
+      return;
+    }
+    if (line === 'undo') {
+      setSession(undo(session));
+      setPose('leap');
+      return;
+    }
+    const { state, justSolved } = applyCommand(level, session, line);
+    react(state, justSolved, poseForCommand(line));
   };
 
   const finishRebase = (chosen: string[]) => {
-    setSession((current) => {
-      const { state, justSolved } = applyInteractiveRebase(level, current, chosen);
-      if (justSolved) {
-        markSolved(level.id, state.commandCount);
-        setCelebrating(true);
-      }
-      return state;
-    });
+    const { state, justSolved } = applyInteractiveRebase(level, session, chosen);
+    react(state, justSolved, 'leap');
   };
 
   const optimal = level.solutionCommand.split(';').filter((c) => c.trim()).length;
@@ -95,8 +128,8 @@ export function LevelPlayer({
       <div className="gfk-play-grid">
         <section className="gfk-panel gfk-graph-panel">
           <h2 className="gfk-panel-title gfk-pixel">{t('yourRepo')}</h2>
-          <div className="gfk-graph-scroll">
-            <CommitGraph tree={session.tree} />
+          <div className={`gfk-graph-scroll${shaking ? ' gfk-world-hurt' : ''}`}>
+            <CommitGraph tree={session.tree} pose={pose} />
           </div>
         </section>
 
@@ -104,7 +137,7 @@ export function LevelPlayer({
           <section className="gfk-panel gfk-goal-panel">
             <h2 className="gfk-panel-title gfk-pixel">{t('goal')}</h2>
             <div className="gfk-graph-scroll">
-              <CommitGraph tree={goalTree(level)} animate={false} />
+              <CommitGraph tree={goalTree(level)} animate={false} showCharacters={false} />
             </div>
           </section>
         )}
@@ -114,7 +147,10 @@ export function LevelPlayer({
             <button
               type="button"
               className="gfk-btn gfk-btn-ghost gfk-btn-small"
-              onClick={() => setSession((s) => undo(s))}
+              onClick={() => {
+                setSession(undo(session));
+                setPose('leap');
+              }}
               disabled={session.past.length === 0}
             >
               ↺ {t('undo')}
@@ -122,7 +158,10 @@ export function LevelPlayer({
             <button
               type="button"
               className="gfk-btn gfk-btn-ghost gfk-btn-small"
-              onClick={() => setSession((s) => resetLevel(level, s))}
+              onClick={() => {
+                setSession(resetLevel(level, session));
+                setPose('idle');
+              }}
             >
               ⟳ {t('reset')}
             </button>
