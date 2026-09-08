@@ -163,16 +163,26 @@ for (const [seqKey, paths] of Object.entries(SEQUENCES)) {
         : { usesDefaultTree: true }),
       goalTreeString: normalizeTree(raw.goalTreeString, `${path}.goalTreeString`),
       solutionCommand: raw.solutionCommand,
-      // Flags that change how the goal comparison works. Must be preserved
-      // exactly or levels will grade wrong.
-      ...(raw.compareOnlyMainParent && { compareOnlyMainParent: true }),
-      ...(raw.compareOnlyBranchesAndHead && { compareOnlyBranchesAndHead: true }),
-      ...(raw.compareOnlyMainParentIncludingLocalReferences && {
-        compareOnlyMainParentIncludingLocalReferences: true,
-      }),
-      ...(raw.compareAllBranchesHashAgnostic && { compareAllBranchesHashAgnostic: true }),
-      ...(raw.compareAllBranchesHashAgnosticAndTags && {
-        compareAllBranchesHashAgnosticAndTags: true,
+      // Every flag TreeCompare dispatches on, copied through generically --
+      // whitelisting individual names silently drops grading rules and makes
+      // levels pass that should not.
+      ...Object.fromEntries(
+        Object.entries(raw).filter(
+          ([k]) =>
+            /^compare/.test(k) || k === 'onlyEvaluateAsserts' || k === 'originCompare',
+        ),
+      ),
+      // goalAsserts are predicate FUNCTIONS upstream, which JSON cannot carry
+      // (they serialize to null and silently make levels pass). Keep their
+      // source text so drift is visible; the runtime uses the hand-ported
+      // equivalents in lib/git/asserts.ts, checked against these.
+      ...(raw.goalAsserts && {
+        goalAsserts: Object.fromEntries(
+          Object.entries(raw.goalAsserts).map(([branch, fns]) => [
+            branch,
+            fns.map((fn) => String(fn).replace(/\s+/g, ' ').trim()),
+          ]),
+        ),
       }),
       ...(raw.disabledMap && { disabledMap: raw.disabledMap }),
       startDialog: enDialog(raw.startDialog),
