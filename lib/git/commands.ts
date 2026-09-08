@@ -57,12 +57,28 @@ function parseRefspec(arg: string | undefined) {
 }
 
 /**
+ * Bare shortcuts used by learnGitBranching's own lesson demos.
+ *
+ * These are only expanded when they appear as the FIRST word without a
+ * leading `git`, so `git gc` still means git's garbage collect rather than
+ * a commit. Deliberately limited to what upstream's content relies on --
+ * inventing extra aliases would be adding to the base game.
+ */
+const SHORTCUTS: Record<string, string[]> = {
+  go: ['git', 'checkout'],
+  gc: ['git', 'commit'],
+};
+
+/**
  * Run one git command against the repo, mutating it in place.
  * Throws GitError for anything the player did wrong.
  */
 export function runCommand(repo: GitRepo, line: string): CommandResult {
-  const tokens = tokenize(line.trim());
+  let tokens = tokenize(line.trim());
   if (tokens.length === 0) return { output: [] };
+
+  const shortcut = SHORTCUTS[tokens[0]];
+  if (shortcut) tokens = [...shortcut, ...tokens.slice(1)];
 
   if (tokens[0] !== 'git') {
     throw new GitError(
@@ -295,6 +311,32 @@ export function runCommands(repo: GitRepo, chain: string): string[] {
     const line = part.trim();
     if (!line) continue;
     output.push(...runCommand(repo, line).output);
+  }
+  return output;
+}
+
+/**
+ * Same, but resolves an interactive rebase automatically by keeping every
+ * commit in its existing order.
+ *
+ * Lesson demos use this: upstream's demo commands include bare
+ * `git rebase -i ... --aboveAll`, which in the real game pauses for the
+ * player. A demo has nobody to ask, so without this the slide would show a
+ * button that appears to do nothing.
+ */
+export function runCommandsForDemo(repo: GitRepo, chain: string): string[] {
+  const output: string[] = [];
+  for (const part of chain.split(';')) {
+    const line = part.trim();
+    if (!line) continue;
+    const result = runCommand(repo, line);
+    if (result.interactive) {
+      const { targetRef, sourceRef, commits } = result.interactive;
+      repo.rebaseInteractive(targetRef, commits, sourceRef ?? 'HEAD');
+      output.push(`Rebased ${commits.length} commit(s) onto ${targetRef}`);
+    } else {
+      output.push(...result.output);
+    }
   }
   return output;
 }

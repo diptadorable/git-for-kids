@@ -58,8 +58,8 @@ export const strings = {
   // --- interactive rebase -------------------------------------------------
   rebaseTitle: { id: 'Susun Ulang Commit', en: 'Reorder Commits' },
   rebaseHelp: {
-    id: 'Seret untuk mengurutkan. Klik untuk membuang commit.',
-    en: 'Drag to reorder. Click to drop a commit.',
+    id: 'Pakai ↑ ↓ untuk mengatur urutan. Pencet × untuk membuang commit.',
+    en: 'Use ↑ ↓ to set the order. Press × to drop a commit.',
   },
   rebaseConfirm: { id: 'Jalankan', en: 'Run it' },
   rebaseCancel: { id: 'Batal', en: 'Cancel' },

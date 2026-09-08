@@ -520,29 +520,46 @@ export class GitRepo {
     this.tags[name] = { id: name, target: this.resolve(ref), type: 'tag' };
   }
 
-  /** `git describe <ref>` -> "<tag>_<commitsSince>_g<ref>", upstream's format. */
+  /**
+   * `git describe <ref>` -> "<tag>-<commitsSince>-g<ref>".
+   *
+   * Mirrors upstream's walk: a queue seeded with the start commit, popping the
+   * most recent entry and pushing ALL parents (so merges are followed on both
+   * sides), counting every commit visited before a tagged one turns up.
+   */
   describe(ref = 'HEAD'): string {
-    const startId = this.resolve(ref);
-    // Walk back until we hit a tagged commit, counting the distance.
-    const tagFor = new Map<string, string>();
-    for (const t of Object.values(this.tags)) tagFor.set(t.target, t.id);
-
-    let depth = 0;
-    let cursor = startId;
-    const guard = new Set<string>();
-    while (!tagFor.has(cursor)) {
-      if (guard.has(cursor)) break;
-      guard.add(cursor);
-      const parents = this.commits[cursor]?.parents ?? [];
-      if (parents.length === 0) {
-        throw new GitError(`No tags found on the history of ${ref}`);
-      }
-      cursor = parents[0];
-      depth++;
+    if (Object.keys(this.tags).length === 0) {
+      throw new GitError('There are no tags in this repository to describe from');
     }
-    const tagName = tagFor.get(cursor);
-    if (!tagName) throw new GitError(`No tags found on the history of ${ref}`);
-    return depth === 0 ? tagName : `${tagName}_${depth}_g${startId}`;
+    const startId = this.resolve(ref);
+
+    const tagFor = new Map<string, string>();
+    for (const tag of Object.values(this.tags)) tagFor.set(tag.target, tag.id);
+
+    let queue = [startId];
+    const visited: string[] = [];
+    let foundTag: string | undefined;
+
+    while (queue.length > 0) {
+      const popped = queue.pop()!;
+      const tag = tagFor.get(popped);
+      if (tag) {
+        foundTag = tag;
+        break;
+      }
+      visited.push(popped);
+      const parents = this.commits[popped]?.parents ?? [];
+      if (parents.length > 0) {
+        queue = queue.concat(parents);
+        // Upstream orders by commit date; ours orders by commit number, which
+        // agrees on every level and keeps pop() taking the newest commit.
+        queue.sort((a, b) => GitRepo.idSortValue(a) - GitRepo.idSortValue(b));
+      }
+    }
+
+    if (!foundTag) throw new GitError(`No tags found on the history of ${ref}`);
+    if (visited.length === 0) return foundTag;
+    return `${foundTag}-${visited.length}-g${startId}`;
   }
 
   // ---------------------------------------------------------------------

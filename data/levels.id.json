@@ -1,6 +1,5 @@
 {
   "_note": "Indonesian lesson content. Upstream learnGitBranching ships 17 languages but no Indonesian, so this file is ours. Level structure, commands and demos mirror the originals exactly; only the wording is rewritten for a primary-school reader. Levels without a startDialog here fall back to the English original.",
-
   "commits": {
     "name": "Kenalan dengan Commit",
     "hint": "Ketik 'git commit' dua kali untuk selesai!",
@@ -52,7 +51,6 @@
       ]
     }
   },
-
   "branching": {
     "name": "Bikin Cabang Baru",
     "hint": "Bikin cabang dengan \"git branch <nama-cabang>\", lalu pindah ke sana dengan \"git checkout <nama-cabang>\"",
@@ -143,7 +141,6 @@
       ]
     }
   },
-
   "merging": {
     "name": "Menggabungkan Cabang",
     "hint": "Ingat urutannya ya (bugFix dulu, baru main)",
@@ -208,7 +205,6 @@
       ]
     }
   },
-
   "rebasing": {
     "name": "Rebase: Pindah Rapi",
     "hint": "Pastikan commit dari bugFix dulu ya",
@@ -275,42 +271,675 @@
       ]
     }
   },
-
-  "detachedHead": { "name": "HEAD yang Lepas", "hint": "Pakai nama (hash) commit-nya untuk membantu!" },
-  "relativeRefs": { "name": "Alamat Singkat (^)", "hint": "Ingat tanda topi (^) ya!" },
-  "relativeRefs2": { "name": "Alamat Singkat #2 (~)", "hint": "Kamu perlu memakai minimal satu nama commit langsung (hash) untuk level ini" },
-  "reversingChanges": { "name": "Membatalkan Perubahan", "hint": "Perhatikan, revert dan reset itu argumennya beda." },
-
-  "cherryPick": { "name": "Petik Ceri", "hint": "Ketik git cherry-pick lalu nama commit-nya!" },
-  "interactiveRebase": { "name": "Rebase Pilih Sendiri", "hint": "Kamu boleh pakai nama cabang atau alamat singkat (HEAD~) sebagai tujuan rebase" },
-  "staging": { "name": "Meja Persiapan", "hint": "Siapkan file dengan `git add <file>`, lalu simpan dengan `git commit`. Lakukan dua kali, satu file sekali jalan." },
-  "restore": { "name": "Batalin Pakai git restore", "hint": "Turunkan dari meja dengan `git restore --staged secret.env`, buang percobaannya dengan `git restore experiment.js`, lalu `git commit`." },
-
-  "grabbingOneCommit": { "name": "Ambil Satu Commit Saja", "hint": "Ingat, rebase interaktif atau cherry-pick adalah temanmu di sini" },
-  "jugglingCommits": { "name": "Main Sulap Commit", "hint": "Perintah pertamanya adalah git rebase -i HEAD~2" },
-  "jugglingCommits2": { "name": "Main Sulap Commit #2", "hint": "Jangan lupa majukan main ke perubahan yang terbaru!" },
-  "tags": { "name": "Tag: Penanda Permanen", "hint": "Kamu boleh checkout langsung ke commit-nya, atau cukup checkout ke tag-nya!" },
-  "describe": { "name": "Git Describe", "hint": "Cukup commit sekali di bugFix kalau kamu sudah siap lanjut" },
-
-  "manyRebases": { "name": "Rebase Berkali-kali", "hint": "Ingat, cara paling hemat mungkin dengan memajukan main di akhir saja..." },
-  "multipleParents": { "name": "Punya Dua Orang Tua", "hint": "Pakai `git branch bugWork` dengan commit tujuan untuk membuat penanda yang hilang." },
-  "selectiveRebase": { "name": "Cabang Mie Kusut", "hint": "Pastikan urutannya benar! one dulu, lalu two, baru three" },
-
-  "clone": { "name": "Menyalin Gudang", "hint": "Cukup git clone!" },
-  "remoteBranches": { "name": "Cabang di Seberang", "hint": "Perhatikan urutannya -- commit di main dulu!" },
-  "fetch": { "name": "Ambil Kabar (fetch)", "hint": "Cukup jalankan git fetch!" },
-  "pull": { "name": "Tarik Semua (pull)", "hint": "Cukup jalankan git pull!" },
-  "fakeTeamwork": { "name": "Pura-pura Ada Teman", "hint": "Ingat, kamu bisa menentukan berapa banyak commit yang dibuat" },
-  "push": { "name": "Kirim Kerjaan (push)", "hint": "Ingat, kamu harus clone dulu sebelum bisa push!" },
-  "fetchRebase": { "name": "Sejarah Bercabang Dua", "hint": "Perhatikan urutan dari gambar target" },
-  "lockedMain": { "name": "Main Dikunci", "hint": "Bikin cabang feature dari main lokal dulu, baru kembalikan main supaya sama dengan main milik origin" },
-
-  "pushManyFeatures": { "name": "Push Main!", "hint": "Ingat kamu selalu bisa memakai perintah undo atau reset" },
-  "mergeManyFeatures": { "name": "Merge Bareng Remote", "hint": "Perhatikan baik-baik gambar targetnya!" },
-  "tracking": { "name": "Melacak Cabang Remote", "hint": "Ingat ada dua cara untuk mengatur pelacakan remote!" },
-  "pushArgs": { "name": "Argumen git push", "hint": "Kamu selalu bisa melihat slide terakhir dengan tombol \"Misi\"" },
-  "pushArgs2": { "name": "Argumen git push -- Lanjutan!", "hint": "Perhatikan, nama commit-nya bisa tertukar!" },
-  "fetchArgs": { "name": "Argumen git fetch", "hint": "Perhatikan bagaimana nama commit bisa bertukar! Kamu bisa membaca slide lagi lewat tombol \"Misi\"" },
-  "sourceNothing": { "name": "Sumbernya Kosong", "hint": "Perintah branch dimatikan di level ini, jadi kamu harus pakai fetch!" },
-  "pullArgs": { "name": "Argumen git pull", "hint": "Ingat kamu bisa membuat cabang lokal baru lewat argumen fetch/pull" }
+  "detachedHead": {
+    "name": "HEAD yang Lepas",
+    "hint": "Pakai nama (hash) commit-nya untuk membantu!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Jalan-jalan di dalam Git",
+              "",
+              "Sebelum belajar jurus-jurus Git yang lebih sakti, kamu harus bisa **berpindah-pindah** dulu di antara commit.",
+              "",
+              "Kalau kamu sudah lancar berpindah, semua perintah Git lainnya jadi terasa jauh lebih gampang!"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Apa itu HEAD?",
+              "",
+              "HEAD itu seperti **tanda \"kamu di sini\"** di peta. Dia menunjuk commit mana yang sedang kamu tempati sekarang.",
+              "",
+              "Biasanya HEAD tidak menempel langsung ke commit, tapi menempel ke sebuah cabang (misalnya `bugFix`). Jadi kalau kamu commit, cabangnya yang maju, dan HEAD ikut terbawa.",
+              "",
+              "Anggap saja HEAD itu kamu, dan cabang itu perahu yang kamu naiki."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo kita intip. Di sini HEAD akan kita tampakkan sebelum dan sesudah commit."
+            ],
+            "afterMarkdowns": [
+              "Nah! Ternyata HEAD dari tadi memang sedang bersembunyi di balik cabang `main`."
+            ],
+            "command": "git checkout C1; git checkout main; git commit; git checkout C2",
+            "beforeCommand": ""
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "### Melepas HEAD",
+              "",
+              "Melepas HEAD artinya menempelkan HEAD langsung ke sebuah commit, bukan ke cabang. Kamu turun dari perahu dan berdiri di daratan.",
+              "",
+              "Sebelumnya begini:",
+              "",
+              "HEAD -> main -> C1"
+            ],
+            "afterMarkdowns": [
+              "Sekarang jadi begini:",
+              "",
+              "HEAD -> C1"
+            ],
+            "command": "git checkout C1",
+            "beforeCommand": ""
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Lepaskan HEAD dari `bugFix`, lalu tempelkan langsung ke commit-nya.",
+              "",
+              "Sebutkan commit itu pakai namanya. Nama tiap commit tertulis di dalam lingkarannya."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "relativeRefs": {
+    "name": "Alamat Singkat (^)",
+    "hint": "Ingat tanda topi (^) ya!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Alamat Singkat",
+              "",
+              "Menyebut commit satu per satu pakai namanya lama-lama capek juga. Di dunia nyata kamu tidak punya gambar cantik seperti ini di sebelah layar.",
+              "",
+              "Nama commit asli juga panjang banget. Contohnya `fed2da64c0efc5293610bdd892f82a58e8cbc5d8`. Panjang sekali kan?",
+              "",
+              "Untungnya Git pintar. Kamu cukup mengetik beberapa huruf pertama saja, misalnya `fed2`, asal tidak ada commit lain yang mirip."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Tetap saja itu merepotkan. Makanya Git punya **alamat singkat**. Ini keren banget!",
+              "",
+              "Idenya: mulai dari tempat yang gampang diingat (misalnya cabang `bugFix` atau `HEAD`), lalu hitung mundur dari situ.",
+              "",
+              "Ada dua yang akan kita pakai:",
+              "",
+              "* `^` untuk naik **satu** commit",
+              "* `~<angka>` untuk naik **beberapa** commit sekaligus"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kita coba tanda topi (`^`) dulu. Setiap kali kamu menambahkannya, Git akan mencari **induk** dari commit itu.",
+              "",
+              "Jadi `main^` artinya \"induknya `main`\".",
+              "",
+              "Kalau `main^^` artinya kakeknya `main`.",
+              "",
+              "Ayo pindah ke commit di atas main."
+            ],
+            "afterMarkdowns": [
+              "Berhasil! Jauh lebih gampang daripada mengetik nama commit-nya."
+            ],
+            "command": "git checkout main^",
+            "beforeCommand": "git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "`HEAD` juga bisa dipakai sebagai titik awal. Ayo pakai beberapa kali untuk naik ke atas."
+            ],
+            "afterMarkdowns": [
+              "Gampang! Kita bisa mundur ke masa lalu pakai `HEAD^`."
+            ],
+            "command": "git checkout C3; git checkout HEAD^; git checkout HEAD^; git checkout HEAD^",
+            "beforeCommand": "git commit; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Pindah ke commit **induknya** `bugFix`. HEAD kamu akan terlepas.",
+              "",
+              "Boleh saja pakai nama commit-nya, tapi coba pakai alamat singkat ya!"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "relativeRefs2": {
+    "name": "Alamat Singkat #2 (~)",
+    "hint": "Kamu perlu memakai minimal satu nama commit langsung (hash) untuk level ini",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Tanda gelombang \"~\"",
+              "",
+              "Kalau kamu mau naik banyak sekali, mengetik `^^^^^^` itu melelahkan. Makanya Git punya tanda gelombang (`~`).",
+              "",
+              "Di belakang `~` kamu bisa menulis angka: berapa langkah yang mau kamu naiki. Ayo lihat contohnya."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo naik beberapa commit sekaligus pakai `~`."
+            ],
+            "afterMarkdowns": [
+              "Mantap! Singkat sekali. Alamat singkat itu memang enak dipakai."
+            ],
+            "command": "git checkout HEAD~4",
+            "beforeCommand": "git commit; git commit; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Memaksa cabang pindah",
+              "",
+              "Sekarang kamu sudah jago alamat singkat. Ayo kita pakai untuk sesuatu yang berguna.",
+              "",
+              "Alamat singkat paling sering dipakai untuk **memindahkan cabang**. Pakai pilihan `-f` untuk menyeret cabang ke commit mana pun:",
+              "",
+              "`git branch -f main HEAD~3`",
+              "",
+              "Artinya: paksa cabang `main` pindah ke tiga langkah di atas HEAD.",
+              "",
+              "*Catatan: di Git sungguhan, `git branch -f` tidak boleh dipakai pada cabang yang sedang kamu tempati.*"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo lihat perintah tadi bekerja."
+            ],
+            "afterMarkdowns": [
+              "Nah! Alamat singkat memberi kita cara pendek untuk menyebut `C1`, dan `-f` memberi kita cara cepat memindahkan cabang ke sana."
+            ],
+            "command": "git branch -f main HEAD~3",
+            "beforeCommand": "git commit; git commit; git commit; git checkout -b bugFix"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Sekarang gabungkan keduanya: alamat singkat dan memaksa cabang pindah.",
+              "",
+              "Pindahkan `HEAD`, `main`, dan `bugFix` ke tempat tujuan yang ditunjukkan di target."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "reversingChanges": {
+    "name": "Membatalkan Perubahan",
+    "hint": "Perhatikan, revert dan reset itu argumennya beda.",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Membatalkan Perubahan",
+              "",
+              "Salah itu wajar! Untungnya Git punya cara membatalkan pekerjaan.",
+              "",
+              "Ada dua cara utama: `git reset` dan `git revert`. Keduanya membatalkan, tapi caranya beda banget.",
+              "",
+              "Kita lihat satu per satu di halaman berikutnya."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "## Git Reset",
+              "",
+              "`git reset` membatalkan dengan cara **memundurkan** cabang ke commit yang lebih lama.",
+              "",
+              "Anggap saja seperti menghapus tulisan di papan: setelah itu, seolah-olah commit tadi tidak pernah ada.",
+              "",
+              "Ayo lihat:"
+            ],
+            "afterMarkdowns": [
+              "Sip! Git memundurkan cabang main kembali ke `C1`. Sekarang keadaannya seolah-olah `C2` tidak pernah dibuat."
+            ],
+            "command": "git reset HEAD~1",
+            "beforeCommand": "git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "## Git Revert",
+              "",
+              "Reset enak dipakai kalau pekerjaannya masih di komputermu sendiri. Tapi kalau sudah dibagikan ke teman, menghapus sejarah malah bikin bingung mereka.",
+              "",
+              "Kalau kamu mau membatalkan **dan** hasil pembatalannya ikut dibagikan, pakai `git revert`. Ayo coba."
+            ],
+            "afterMarkdowns": [
+              "Lho, kok malah muncul commit baru di ujungnya?",
+              "",
+              "Itu memang sengaja. Commit baru `C2'` isinya kebalikan dari `C2`. Jadi hasil akhirnya sama-sama batal, tapi sejarahnya tetap utuh dan aman dibagikan ke teman."
+            ],
+            "command": "git revert HEAD^",
+            "beforeCommand": "git commit; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Batalkan commit terakhir di cabang `local` **dan** di cabang `pushed`. Jadi total dua pembatalan, satu di tiap cabang.",
+              "",
+              "Ingat: `pushed` itu cabang yang sudah dibagikan, `local` masih milikmu sendiri. Petunjuk itu menentukan cara mana yang kamu pakai untuk masing-masing."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cherryPick": {
+    "name": "Petik Ceri",
+    "hint": "Ketik git cherry-pick lalu nama commit-nya!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Memindahkan Pekerjaan",
+              "",
+              "Sampai sini kamu sudah bisa commit, bikin cabang, dan jalan-jalan di pohon commit. Bekal itu saja sudah cukup untuk 90% pekerjaan sehari-hari!",
+              "",
+              "Sisa 10%-nya berguna kalau keadaan mulai ruwet. Sekarang kita belajar **memindahkan pekerjaan**: cara bilang ke Git \"yang ini taruh sini, yang itu taruh sana\".",
+              "",
+              "Kedengarannya rumit, padahal gampang kok."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Git Cherry-pick",
+              "",
+              "Namanya `git cherry-pick`, artinya \"memetik ceri\". Bentuknya begini:",
+              "",
+              "* `git cherry-pick <Commit1> <Commit2> <...>`",
+              "",
+              "Bayangkan pohon penuh buah. Kamu tidak mau semuanya, cuma mau memetik beberapa buah yang paling enak, lalu menaruhnya di keranjangmu.",
+              "",
+              "Persis begitu: kamu sebut commit mana saja yang kamu mau, dan Git menyalinnya ke bawah posisimu sekarang (`HEAD`).",
+              "",
+              "Ayo lihat contohnya!"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ini gudang yang punya pekerjaan di cabang `side`, dan kita mau menyalinnya ke `main`. Sebenarnya bisa pakai rebase, tapi ayo lihat cara cherry-pick."
+            ],
+            "afterMarkdowns": [
+              "Selesai! Kita minta commit `C2` dan `C4`, lalu Git menaruhnya tepat di bawah kita. Sesederhana itu!"
+            ],
+            "command": "git cherry-pick C2 C4",
+            "beforeCommand": "git checkout -b side; git commit; git commit; git commit; git checkout main; git commit;"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Salin beberapa pekerjaan dari tiga cabang yang ada ke dalam `main`.",
+              "",
+              "Lihat gambar target untuk tahu commit mana saja yang harus kamu petik."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "interactiveRebase": {
+    "name": "Rebase Pilih Sendiri",
+    "hint": "Kamu boleh pakai nama cabang atau alamat singkat (HEAD~) sebagai tujuan rebase",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Rebase Pilih Sendiri",
+              "",
+              "Cherry-pick enak dipakai kalau kamu **sudah tahu** commit mana yang kamu mau.",
+              "",
+              "Tapi kalau kamu belum tahu? Tenang, Git punya jawabannya: **rebase interaktif**. Git akan menunjukkan daftar commit-nya dulu, baru kamu pilih.",
+              "",
+              "Ayo kita lihat."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Rebase interaktif itu cuma `rebase` biasa yang diberi tambahan `-i`.",
+              "",
+              "Kalau kamu pakai `-i`, Git membuka jendela berisi daftar commit yang akan disalin. Jadi kamu bisa melihat dulu semuanya sebelum memutuskan.",
+              "",
+              "Di Git sungguhan, jendela itu berupa file teks yang dibuka di editor. Di game ini, kita pakai kotak dialog yang gampang dipakai."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Di kotak dialog itu kamu bisa melakukan dua hal:",
+              "",
+              "* **Mengubah urutan** commit, pakai tombol panah `↑` dan `↓`.",
+              "* **Membuang** commit yang tidak kamu inginkan, pakai tombol `×`. Pencet lagi kalau berubah pikiran.",
+              "",
+              "*Di Git sungguhan kamu bisa melakukan lebih banyak lagi, misalnya menggabungkan beberapa commit jadi satu atau mengubah pesannya. Tapi di sini kita fokus ke dua hal di atas saja.*",
+              "",
+              "Ayo lihat contohnya!"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Pencet tombolnya, lalu perhatikan commit-commit itu disalin ulang sesuai urutan yang dipilih."
+            ],
+            "afterMarkdowns": [
+              "Mantap! Git menyalin commit-nya persis seperti urutan yang diminta."
+            ],
+            "command": "git rebase -i HEAD~4 --aboveAll",
+            "beforeCommand": "git commit; git commit; git commit; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Lakukan rebase interaktif sampai urutannya sama seperti gambar target.",
+              "",
+              "Kalau salah, santai saja -- kamu selalu bisa pakai tombol **Kembali** atau **Ulangi level**. :D"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "staging": {
+    "name": "Meja Persiapan",
+    "hint": "Siapkan file dengan `git add <file>`, lalu simpan dengan `git commit`. Lakukan dua kali, satu file sekali jalan.",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Meja Persiapan",
+              "",
+              "Selama ini kita commit begitu saja. Padahal sebelum masuk ke commit, tiap file harus **dipilih** dulu.",
+              "",
+              "Kenapa? Karena Git sengaja tidak asal memasukkan semua file. Bisa bahaya! Nanti ada file rahasia (misalnya kata sandi) yang ikut terkirim ke internet.",
+              "",
+              "Git punya tiga tempat:",
+              "",
+              "* **Meja kerja** -- tempat kamu mengetik dan mengubah file",
+              "* **Meja persiapan** -- tempat menaruh file yang siap masuk commit berikutnya",
+              "* **Gudang** -- sejarah permanenmu",
+              "",
+              "Kamu memilih isi tiap commit pakai `git add`. Jadi commit-mu selalu rapi, dan kamu tidak dipaksa mengirim semuanya sekaligus.",
+              "",
+              "*(Mulai level ini, nama file akan ditampilkan di tiap commit.)*"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Ketik `git status` kapan saja untuk melihat keadaan. Sekarang ada dua file yang sudah kamu ubah tapi belum disiapkan:",
+              "",
+              "```",
+              "Changes not staged for commit:",
+              "  modified:   app.js",
+              "  modified:   styles.css",
+              "```",
+              "",
+              "Naikkan satu file ke meja persiapan dengan `git add app.js`, atau semuanya sekaligus dengan `git add .`.",
+              "",
+              "Setelah file ada di meja persiapan, `git commit` akan menyimpannya jadi satu foto.",
+              "",
+              "Punya file yang tidak pernah mau kamu commit, misalnya file rahasia atau sampah? Tulis namanya di file `.gitignore`, nanti Git akan diam-diam mengabaikannya."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Simpan pekerjaanmu **satu file satu commit**, supaya tiap commit isinya jelas:",
+              "",
+              "* `git add app.js`, lalu `git commit`",
+              "* `git add styles.css`, lalu `git commit`",
+              "",
+              "Nama file di sebelah tiap commit target menunjukkan mana yang harus masuk ke mana. Dua commit rapi, dan level ini selesai."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "restore": {
+    "name": "Batalin Pakai git restore",
+    "hint": "Turunkan dari meja dengan `git restore --staged secret.env`, buang percobaannya dengan `git restore experiment.js`, lalu `git commit`.",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Batalin pakai `git restore`",
+              "",
+              "Semua orang pernah berantakan. Salah menaikkan file ke meja persiapan, atau mencoba sesuatu yang ternyata jelek dan mau dibuang.",
+              "",
+              "`git restore` itu tombol \"batal\" khusus untuk meja kerja dan meja persiapan.",
+              "",
+              "Ada dua rasa:",
+              "",
+              "* `git restore --staged <file>` -- **turunkan** file dari meja persiapan, tapi hasil ketikanmu tetap aman",
+              "* `git restore <file>` -- **buang** semua perubahanmu di file itu (hati-hati, ini benar-benar hilang!)"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Ini keadaan mejamu sekarang:",
+              "",
+              "```",
+              "Changes to be committed:",
+              "  modified:   app.js",
+              "  modified:   secret.env",
+              "",
+              "Changes not staged for commit:",
+              "  modified:   experiment.js",
+              "```",
+              "",
+              "Kamu ingin commit `app.js`. Tapi `secret.env` kenaikan ke meja persiapan tanpa sengaja, jadi turunkan dulu.",
+              "",
+              "Lalu `experiment.js` itu percobaan yang gagal, jadi buang saja seluruhnya."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Rapikan dulu, baru commit:",
+              "",
+              "* Turunkan yang rahasia: `git restore --staged secret.env`",
+              "* Buang percobaannya: `git restore experiment.js`",
+              "* Simpan sisanya: `git commit`",
+              "",
+              "Hasilnya satu commit bersih, isinya cuma pekerjaan yang memang kamu mau."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "grabbingOneCommit": {
+    "name": "Ambil Satu Commit Saja",
+    "hint": "Ingat, rebase interaktif atau cherry-pick adalah temanmu di sini"
+  },
+  "jugglingCommits": {
+    "name": "Main Sulap Commit",
+    "hint": "Perintah pertamanya adalah git rebase -i HEAD~2"
+  },
+  "jugglingCommits2": {
+    "name": "Main Sulap Commit #2",
+    "hint": "Jangan lupa majukan main ke perubahan yang terbaru!"
+  },
+  "tags": {
+    "name": "Tag: Penanda Permanen",
+    "hint": "Kamu boleh checkout langsung ke commit-nya, atau cukup checkout ke tag-nya!"
+  },
+  "describe": {
+    "name": "Git Describe",
+    "hint": "Cukup commit sekali di bugFix kalau kamu sudah siap lanjut"
+  },
+  "manyRebases": {
+    "name": "Rebase Berkali-kali",
+    "hint": "Ingat, cara paling hemat mungkin dengan memajukan main di akhir saja..."
+  },
+  "multipleParents": {
+    "name": "Punya Dua Orang Tua",
+    "hint": "Pakai `git branch bugWork` dengan commit tujuan untuk membuat penanda yang hilang."
+  },
+  "selectiveRebase": {
+    "name": "Cabang Mie Kusut",
+    "hint": "Pastikan urutannya benar! one dulu, lalu two, baru three"
+  },
+  "clone": {
+    "name": "Menyalin Gudang",
+    "hint": "Cukup git clone!"
+  },
+  "remoteBranches": {
+    "name": "Cabang di Seberang",
+    "hint": "Perhatikan urutannya -- commit di main dulu!"
+  },
+  "fetch": {
+    "name": "Ambil Kabar (fetch)",
+    "hint": "Cukup jalankan git fetch!"
+  },
+  "pull": {
+    "name": "Tarik Semua (pull)",
+    "hint": "Cukup jalankan git pull!"
+  },
+  "fakeTeamwork": {
+    "name": "Pura-pura Ada Teman",
+    "hint": "Ingat, kamu bisa menentukan berapa banyak commit yang dibuat"
+  },
+  "push": {
+    "name": "Kirim Kerjaan (push)",
+    "hint": "Ingat, kamu harus clone dulu sebelum bisa push!"
+  },
+  "fetchRebase": {
+    "name": "Sejarah Bercabang Dua",
+    "hint": "Perhatikan urutan dari gambar target"
+  },
+  "lockedMain": {
+    "name": "Main Dikunci",
+    "hint": "Bikin cabang feature dari main lokal dulu, baru kembalikan main supaya sama dengan main milik origin"
+  },
+  "pushManyFeatures": {
+    "name": "Push Main!",
+    "hint": "Ingat kamu selalu bisa memakai perintah undo atau reset"
+  },
+  "mergeManyFeatures": {
+    "name": "Merge Bareng Remote",
+    "hint": "Perhatikan baik-baik gambar targetnya!"
+  },
+  "tracking": {
+    "name": "Melacak Cabang Remote",
+    "hint": "Ingat ada dua cara untuk mengatur pelacakan remote!"
+  },
+  "pushArgs": {
+    "name": "Argumen git push",
+    "hint": "Kamu selalu bisa melihat slide terakhir dengan tombol \"Misi\""
+  },
+  "pushArgs2": {
+    "name": "Argumen git push -- Lanjutan!",
+    "hint": "Perhatikan, nama commit-nya bisa tertukar!"
+  },
+  "fetchArgs": {
+    "name": "Argumen git fetch",
+    "hint": "Perhatikan bagaimana nama commit bisa bertukar! Kamu bisa membaca slide lagi lewat tombol \"Misi\""
+  },
+  "sourceNothing": {
+    "name": "Sumbernya Kosong",
+    "hint": "Perintah branch dimatikan di level ini, jadi kamu harus pakai fetch!"
+  },
+  "pullArgs": {
+    "name": "Argumen git pull",
+    "hint": "Ingat kamu bisa membuat cabang lokal baru lewat argumen fetch/pull"
+  }
 }

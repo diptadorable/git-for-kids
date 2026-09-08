@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Markdown } from '@/components/Markdown';
 import { CommitGraph } from './CommitGraph';
 import { GitRepo } from '@/lib/git/repo';
-import { runCommands } from '@/lib/git/commands';
+import { runCommandsForDemo } from '@/lib/git/commands';
 import type { Tree } from '@/lib/git/types';
 import type { DialogView } from '@/lib/game/content';
 
@@ -23,13 +23,13 @@ function DemoSlide({ options }: { options: NonNullable<DialogView['options']> })
   const { before, after } = useMemo(() => {
     const repo = GitRepo.fromDefault();
     try {
-      if (options.beforeCommand) runCommands(repo, options.beforeCommand);
+      if (options.beforeCommand) runCommandsForDemo(repo, options.beforeCommand);
     } catch {
       /* a demo that cannot set up just shows the default repo */
     }
     const beforeTree = repo.toTree();
     try {
-      if (options.command) runCommands(repo, options.command);
+      if (options.command) runCommandsForDemo(repo, options.command);
     } catch {
       /* leave the tree as-is if the demo command is unsupported */
     }
