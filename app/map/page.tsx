@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth';
 import { signOutAction } from '@/app/actions/auth';
 import { WorldMap } from '@/components/game/WorldMap';
+import { databaseConfigured } from '@/lib/db';
 
 export default async function MapPage() {
   const session = await auth();
@@ -10,6 +11,7 @@ export default async function MapPage() {
       signedIn={Boolean(session?.user)}
       playerName={session?.user?.name}
       onSignOut={signOutAction}
+      accountsAvailable={databaseConfigured}
     />
   );
 }

@@ -22,10 +22,12 @@ export function WorldMap({
   signedIn,
   playerName,
   onSignOut,
+  accountsAvailable = true,
 }: {
   signedIn: boolean;
   playerName?: string | null;
   onSignOut: () => void;
+  accountsAvailable?: boolean;
 }) {
   const { t, lang, progress, hydrated } = useGame();
   const completed = progress.completed;
@@ -34,7 +36,12 @@ export function WorldMap({
 
   return (
     <main className="gfk-shell">
-      <TopBar signedIn={signedIn} playerName={playerName} onSignOut={onSignOut} />
+      <TopBar
+        signedIn={signedIn}
+        playerName={playerName}
+        onSignOut={onSignOut}
+        accountsAvailable={accountsAvailable}
+      />
 
       <div className="gfk-zone-head">
         <h2 className="gfk-pixel">{t('worldMap')}</h2>

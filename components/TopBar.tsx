@@ -8,10 +8,13 @@ export function TopBar({
   signedIn,
   playerName,
   onSignOut,
+  accountsAvailable = true,
 }: {
   signedIn: boolean;
   playerName?: string | null;
   onSignOut: () => void;
+  /** False when no database is configured -- then there is nothing to sign in to. */
+  accountsAvailable?: boolean;
 }) {
   const { t, lang, setLang, syncStatus } = useGame();
 
@@ -54,9 +57,13 @@ export function TopBar({
           </button>
         </>
       ) : (
-        <Link href="/login" className="gfk-btn gfk-btn-ghost gfk-btn-small">
-          {t('signIn')}
-        </Link>
+        // Without a database, a sign-in link is a dead end -- hide it rather
+        // than sending a child to a page that can only apologise.
+        accountsAvailable && (
+          <Link href="/login" className="gfk-btn gfk-btn-ghost gfk-btn-small">
+            {t('signIn')}
+          </Link>
+        )
       )}
     </header>
   );
