@@ -848,98 +848,1712 @@
   },
   "grabbingOneCommit": {
     "name": "Ambil Satu Commit Saja",
-    "hint": "Ingat, rebase interaktif atau cherry-pick adalah temanmu di sini"
+    "hint": "Ingat, rebase interaktif atau cherry-pick adalah temanmu di sini",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Commit yang menumpuk",
+              "",
+              "Ini sering terjadi waktu ngoding beneran. Kamu sedang berburu bug yang susah ketemu. Supaya gampang, kamu menyelipkan beberapa perintah *debug* dan *print* untuk mengintip apa yang terjadi.",
+              "",
+              "Semua percobaan itu jadi commit sendiri-sendiri. Akhirnya bug-nya ketemu, kamu perbaiki, hore!",
+              "",
+              "Masalahnya: sekarang perbaikan di `bugFix` harus masuk ke `main`. Kalau kamu majukan `main` begitu saja, semua commit debug tadi ikut terbawa. Berantakan!",
+              "",
+              "Pasti ada cara lain..."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Kita harus menyuruh Git menyalin **satu commit saja**.",
+              "",
+              "Ini persis seperti level-level \"memindahkan pekerjaan\" tadi. Jadi alatnya juga sama:",
+              "",
+              "* `git rebase -i`",
+              "* `git cherry-pick`",
+              "",
+              "Dua-duanya bisa dipakai untuk tugas ini."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Ini level agak lanjut, jadi kamu yang menentukan mau pakai cara yang mana.",
+              "",
+              "Yang penting: `main` harus mendapat commit yang ditunjuk oleh `bugFix`."
+            ]
+          }
+        }
+      ]
+    }
   },
   "jugglingCommits": {
     "name": "Main Sulap Commit",
-    "hint": "Perintah pertamanya adalah git rebase -i HEAD~2"
+    "hint": "Perintah pertamanya adalah git rebase -i HEAD~2",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Main Sulap Commit",
+              "",
+              "Ini juga sering terjadi. Kamu punya satu pekerjaan (`newImage`) dan pekerjaan lain (`caption`) yang saling berhubungan, jadi keduanya bertumpuk satu di atas yang lain.",
+              "",
+              "Repotnya: kadang kamu perlu memperbaiki sedikit commit yang **sudah lama**. Di sini, bagian desain minta ukuran `newImage` diubah sedikit -- padahal commit itu sudah jauh di belakang!"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Triknya begini:",
+              "",
+              "* Ubah urutan commit pakai `git rebase -i`, supaya commit yang mau diperbaiki ada di paling atas",
+              "* Perbaiki dengan `git commit --amend`",
+              "* Kembalikan urutannya seperti semula, lagi-lagi pakai `git rebase -i`",
+              "* Terakhir, majukan `main` ke hasil terbaru (bebas caranya)",
+              "",
+              "Sebenarnya ada banyak cara lain (iya, aku lihat kamu melirik cherry-pick), dan nanti kita bahas. Tapi sekarang fokus ke cara ini dulu ya.",
+              "",
+              "Perhatikan gambar targetnya: karena commit-nya dipindah **dua kali**, keduanya dapat tanda petik. Lalu commit yang diperbaiki dapat satu petik tambahan.",
+              "",
+              "Tenang, jumlah petiknya tidak harus persis sama. Asal bentuk pohon di cabang `main` sudah benar dan **selisih** petiknya cocok, level ini dihitung selesai."
+            ]
+          }
+        }
+      ]
+    }
   },
   "jugglingCommits2": {
     "name": "Main Sulap Commit #2",
-    "hint": "Jangan lupa majukan main ke perubahan yang terbaru!"
+    "hint": "Jangan lupa majukan main ke perubahan yang terbaru!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Main Sulap Commit #2",
+              "",
+              "*Kalau kamu belum menyelesaikan \"Main Sulap Commit\" yang pertama, selesaikan dulu ya sebelum lanjut.*",
+              "",
+              "Di level sebelumnya kita memakai `rebase -i` untuk mengubah urutan. Setelah commit yang mau diperbaiki ada di atas, kita amend, lalu kembalikan urutannya.",
+              "",
+              "Masalahnya, bolak-balik mengubah urutan itu bisa memicu bentrokan (conflict). Ayo coba cara lain pakai `git cherry-pick`."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ingat, `git cherry-pick` bisa mengambil commit dari mana saja di pohon lalu menaruhnya di atas HEAD (asalkan commit itu bukan nenek moyang HEAD).",
+              "",
+              "Ini contoh pengingat singkat:"
+            ],
+            "afterMarkdowns": [
+              "Mantap! Ayo lanjut."
+            ],
+            "command": "git cherry-pick C2",
+            "beforeCommand": "git checkout -b bugFix; git commit; git checkout main; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Tujuannya sama seperti tadi: perbaiki `C2` satu kali. Tapi kali ini **tanpa** `rebase -i`.",
+              "",
+              "Silakan pikirkan sendiri caranya ya! :D",
+              "",
+              "Ingat, jumlah tanda petik (') tidak harus persis. Yang penting selisihnya cocok. Kalau pohonmu sama bentuknya tapi petiknya lebih satu di semua commit, tetap dihitung benar."
+            ]
+          }
+        }
+      ]
+    }
   },
   "tags": {
     "name": "Tag: Penanda Permanen",
-    "hint": "Kamu boleh checkout langsung ke commit-nya, atau cukup checkout ke tag-nya!"
+    "hint": "Kamu boleh checkout langsung ke commit-nya, atau cukup checkout ke tag-nya!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Tag: Penanda Permanen",
+              "",
+              "Kamu sudah tahu cabang itu gampang dipindah-pindah. Cabang memang begitu: berubah terus, sering cuma sementara.",
+              "",
+              "Lalu bagaimana kalau kamu mau menandai satu titik penting dalam sejarah **selamanya**? Misalnya \"ini versi 1.0 yang dirilis\". Adakah penanda yang lebih awet daripada cabang?"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Ada dong! Namanya **tag**.",
+              "",
+              "Tag menandai commit tertentu sebagai tonggak penting, dan kamu bisa menyebutnya seperti cabang.",
+              "",
+              "Bedanya yang paling penting: **tag tidak pernah ikut maju** walaupun kamu bikin commit baru. Kamu juga tidak bisa \"berdiri\" di tag lalu bekerja di sana. Tag itu seperti patok yang ditancapkan di tanah.",
+              "",
+              "Ayo lihat contohnya."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo bikin tag di `C1`, anggap itu purwarupa versi 1 kita."
+            ],
+            "afterMarkdowns": [
+              "Nah! Gampang kan. Kita beri nama tag-nya `v1` dan menyebut commit `C1` secara langsung.",
+              "",
+              "Kalau nama commit-nya tidak kamu sebut, Git akan memakai posisi `HEAD` saat itu."
+            ],
+            "command": "git tag v1 C1",
+            "beforeCommand": "git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Buat tag-tag seperti di gambar target, lalu pindah ke `v1`.",
+              "",
+              "Perhatikan: HEAD kamu jadi terlepas. Itu wajar, karena kamu memang tidak bisa commit langsung di atas sebuah tag.",
+              "",
+              "Di level berikutnya kita pakai tag untuk hal yang lebih seru."
+            ]
+          }
+        }
+      ]
+    }
   },
   "describe": {
     "name": "Git Describe",
-    "hint": "Cukup commit sekali di bugFix kalau kamu sudah siap lanjut"
+    "hint": "Cukup commit sekali di bugFix kalau kamu sudah siap lanjut",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Git Describe",
+              "",
+              "Karena tag itu patok yang tidak pernah bergerak, Git punya perintah untuk memberitahu **kamu ada di mana** relatif terhadap patok terdekat.",
+              "",
+              "Namanya `git describe`!",
+              "",
+              "Ini berguna kalau kamu sudah melompat jauh maju-mundur di sejarah dan bingung sedang di mana. Misalnya sehabis berburu bug, atau waktu duduk di komputer teman yang baru pulang liburan."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Bentuknya begini:",
+              "",
+              "`git describe <ref>`",
+              "",
+              "`<ref>` itu apa saja yang bisa Git artikan sebagai commit. Kalau tidak kamu isi, Git memakai posisimu sekarang (`HEAD`).",
+              "",
+              "Hasilnya berbentuk:",
+              "",
+              "`<tag>-<jumlahCommit>-g<nama>`",
+              "",
+              "Artinya: `tag` adalah patok terdekat di belakangmu, `jumlahCommit` adalah berapa langkah jaraknya, dan `<nama>` adalah nama commit yang sedang dijelaskan."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo lihat contoh cepat. Untuk pohon di bawah ini:"
+            ],
+            "afterMarkdowns": [
+              "Perintah `git describe main` akan menghasilkan:",
+              "",
+              "`v1-2-gC2`",
+              "",
+              "Sedangkan `git describe side` menghasilkan:",
+              "",
+              "`v2-1-gC4`"
+            ],
+            "command": "git tag v2 C3",
+            "beforeCommand": "git commit; go -b side HEAD~1; gc; gc; git tag v1 C0"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Cuma segitu saja isi `git describe`! Coba jalankan di beberapa tempat di level ini supaya kamu terbiasa.",
+              "",
+              "Kalau sudah puas, cukup commit sekali untuk menyelesaikan level. Anggap saja ini bonus. :P"
+            ]
+          }
+        }
+      ]
+    }
   },
   "manyRebases": {
     "name": "Rebase Berkali-kali",
-    "hint": "Ingat, cara paling hemat mungkin dengan memajukan main di akhir saja..."
+    "hint": "Ingat, cara paling hemat mungkin dengan memajukan main di akhir saja...",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Rebase Banyak Cabang",
+              "",
+              "Wah, cabangnya banyak sekali di sini! Tugas kita: memindahkan semua pekerjaan dari cabang-cabang itu ke atas `main`.",
+              "",
+              "Tapi ada syarat tambahan yang bikin susah: commit-nya harus **berurutan rapi**. Jadi di pohon akhir nanti, `C7'` ada di paling bawah, `C6'` di atasnya, begitu seterusnya sesuai urutan.",
+              "",
+              "Satu tips berguna: `git rebase` bisa menerima argumen kedua. `git rebase main bugFix` artinya pindah ke `bugFix` lalu rebase ke `main`, sekali jalan. Itu jalan pintas dari `git checkout bugFix; git rebase main`.",
+              "",
+              "Kalau kamu salah di tengah jalan, santai saja, pakai tombol **Ulangi level** untuk mulai lagi. Coba juga cari cara dengan perintah sesedikit mungkin!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "multipleParents": {
     "name": "Punya Dua Orang Tua",
-    "hint": "Pakai `git branch bugWork` dengan commit tujuan untuk membuat penanda yang hilang."
+    "hint": "Pakai `git branch bugWork` dengan commit tujuan untuk membuat penanda yang hilang.",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Memilih Orang Tua",
+              "",
+              "Sama seperti `~`, tanda `^` juga bisa diberi angka di belakangnya.",
+              "",
+              "Tapi artinya beda! Angka di `~` berarti \"naik berapa langkah\". Angka di `^` berarti **\"lewat orang tua yang mana\"**.",
+              "",
+              "Ingat, commit hasil merge punya dua orang tua. Jadi kalau kamu naik dari situ, Git bingung mau lewat jalan yang mana.",
+              "",
+              "Biasanya Git otomatis lewat orang tua **pertama**. Dengan menulis angka di `^`, kamu bisa menyuruhnya lewat jalan yang lain.",
+              "",
+              "Sudah cukup ngobrolnya, ayo lihat langsung."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ini ada commit hasil merge. Kalau kita `main^` tanpa angka, kita akan lewat orang tua yang pertama.",
+              "",
+              "(*Di gambar kita, orang tua pertama letaknya tepat di atas commit merge.*)"
+            ],
+            "afterMarkdowns": [
+              "Gampang -- ini yang sudah biasa kita pakai."
+            ],
+            "command": "git checkout main^",
+            "beforeCommand": "git checkout HEAD^; git commit; git checkout main; git merge C2"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sekarang coba kita minta orang tua yang **kedua**..."
+            ],
+            "afterMarkdowns": [
+              "Lihat kan? Kita naik lewat jalan yang satunya."
+            ],
+            "command": "git checkout main^2",
+            "beforeCommand": "git checkout HEAD^; git commit; git checkout main; git merge C2"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kalau digabung, `^` dan `~` bikin kamu bisa melesat ke mana saja di pohon commit:"
+            ],
+            "afterMarkdowns": [
+              "Secepat kilat!"
+            ],
+            "command": "git checkout HEAD~; git checkout HEAD^2; git checkout HEAD~2",
+            "beforeCommand": "git commit; git checkout C0; git commit; git commit; git commit; git checkout main; git merge C5; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Lebih gila lagi: semuanya bisa dirangkai jadi satu! Lihat ini:"
+            ],
+            "afterMarkdowns": [
+              "Perpindahan yang sama persis seperti tadi, tapi cukup satu perintah."
+            ],
+            "command": "git checkout HEAD~^2~2",
+            "beforeCommand": "git commit; git checkout C0; git commit; git commit; git commit; git checkout main; git merge C5; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Misi kamu",
+              "",
+              "Buat cabang baru di tempat yang ditunjukkan target.",
+              "",
+              "Sebenarnya gampang saja kalau kamu menyebut nama commit-nya langsung (misalnya `C6`). Tapi aku tantang kamu memakai tanda `^` dan `~` yang barusan kita pelajari!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "selectiveRebase": {
     "name": "Cabang Mie Kusut",
-    "hint": "Pastikan urutannya benar! one dulu, lalu two, baru three"
+    "hint": "Pastikan urutannya benar! one dulu, lalu two, baru three",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Cabang Mie Kusut",
+              "",
+              "Waaah, targetnya lumayan berat di level ini!",
+              "",
+              "Di sini `main` sudah beberapa langkah di depan cabang `one`, `two`, dan `three`. Tugas kita: mengisi ketiga cabang itu dengan versi ubahan dari beberapa commit terakhir di `main`.",
+              "",
+              "Rinciannya begini:",
+              "",
+              "* Cabang `one` butuh commit-nya **diacak urutannya**, dan `C5` harus **dibuang**",
+              "* Cabang `two` cuma butuh urutannya diubah saja",
+              "* Cabang `three` cuma butuh **satu** commit dipindahkan",
+              "",
+              "Silakan pikirkan sendiri caranya ya! Ingat, kerjakan berurutan: `one` dulu, lalu `two`, baru `three`."
+            ]
+          }
+        }
+      ]
+    }
   },
   "clone": {
     "name": "Menyalin Gudang",
-    "hint": "Cukup git clone!"
+    "hint": "Cukup git clone!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Gudang Jauh (Remote)",
+              "",
+              "Remote itu sebenarnya tidak rumit kok. Remote cuma **salinan gudangmu yang disimpan di komputer lain**. Kamu bisa mengobrol dengan komputer itu lewat internet, jadi commit bisa dikirim bolak-balik.",
+              "",
+              "Kenapa remote itu keren?",
+              "",
+              "- **Cadangan.** Kalau laptopmu rusak atau hilang, pekerjaanmu aman karena ada salinannya di sana. Kamu tinggal lanjut dari situ.",
+              "",
+              "- **Bisa ramai-ramai!** Karena proyekmu ada di tempat yang bisa diakses bersama, teman-temanmu bisa ikut membantu atau mengambil pekerjaan terbarumu.",
+              "",
+              "Situs seperti [GitHub](https://github.com/) itu sebenarnya cuma tampilan cantik di atas remote. Mesin di baliknya ya remote ini. Makanya penting untuk paham!"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Perintah untuk memulai",
+              "",
+              "Sampai sekarang kita cuma bermain di gudang sendiri: bikin cabang, merge, rebase. Sekarang kita mau belajar gudang jauh, jadi kita butuh perintah untuk menyiapkannya: `git clone`.",
+              "",
+              "Sama seperti `git clone` sungguhan, kami sudah menyiapkan sebuah remote untuk pelajaran ini. Menjalankan `git clone` akan menariknya turun ke gudang lokalmu.",
+              "",
+              "Mulai sekarang, `o/main` di gudang lokalmu artinya \"posisi cabang `main` milik remote **waktu terakhir kali** kamu mengeceknya\"."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Pelan-pelan saja. Ayo lihat dulu bentuk sebuah gudang jauh sebelum kita salin."
+            ],
+            "afterMarkdowns": [
+              "Nah, itu dia! Sekarang kamu punya salinan sendiri di komputermu.",
+              "",
+              "Bentuknya mirip, cuma dibedakan tampilannya biar jelas mana yang punyamu dan mana yang punya remote. Di level-level berikutnya kita belajar cara bertukar pekerjaan di antara keduanya."
+            ],
+            "command": "git clone",
+            "beforeCommand": ""
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Cukup jalankan `git clone` untuk menyalin remote yang sudah kami siapkan.",
+              "",
+              "Pelajaran yang sesungguhnya baru dimulai di level berikutnya!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "remoteBranches": {
     "name": "Cabang di Seberang",
-    "hint": "Perhatikan urutannya -- commit di main dulu!"
+    "hint": "Perhatikan urutannya -- commit di main dulu!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Cabang di Seberang",
+              "",
+              "Kamu sudah melihat `git clone` bekerja. Sekarang mari lihat apa sebenarnya yang berubah.",
+              "",
+              "Yang pertama kelihatan: muncul cabang baru bernama `o/main`. Ini disebut **cabang remote**, dan sifatnya spesial.",
+              "",
+              "Cabang remote menunjukkan **keadaan gudang jauh** waktu terakhir kali kamu mengobrol dengannya. Gunanya untuk membedakan mana pekerjaan yang masih di komputermu sendiri dan mana yang sudah dilihat orang lain.",
+              "",
+              "Sifat spesialnya: kalau kamu pindah ke cabang remote, HEAD kamu jadi **terlepas**. Git sengaja begitu, karena kamu memang tidak boleh bekerja langsung di sana. Kamu harus bekerja di tempat lain, lalu mengirimkannya ke remote.",
+              "",
+              "Perlu diingat: cabang remote itu ada di **komputermu**, bukan di komputer seberang."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Kenapa ada `o/`?",
+              "",
+              "Kamu mungkin bertanya-tanya, kenapa ada tulisan `o/` di depannya?",
+              "",
+              "Karena cabang remote punya aturan penamaan:",
+              "",
+              "* `<nama remote>/<nama cabang>`",
+              "",
+              "Jadi kalau kamu lihat `o/main`, artinya nama cabangnya `main` dan nama remote-nya `o`.",
+              "",
+              "Di dunia nyata, orang biasanya menamai remote utamanya `origin`, bukan `o`. Saking umumnya, `git clone` otomatis memberi nama `origin`.",
+              "",
+              "Sayangnya tulisan `origin` kepanjangan untuk layar kita, jadi kita singkat jadi `o` saja. Tapi ingat ya, di Git sungguhan namanya kemungkinan besar `origin`!",
+              "",
+              "Banyak juga yang harus dicerna. Ayo langsung lihat contohnya."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo pindah ke cabang remote dan lihat apa yang terjadi."
+            ],
+            "afterMarkdowns": [
+              "Lihat kan? Git membuat HEAD kita terlepas. Lalu waktu kita bikin commit baru, `o/main` **tidak ikut maju**.",
+              "",
+              "Itu karena `o/main` cuma berubah kalau gudang jauhnya sendiri yang berubah."
+            ],
+            "command": "git checkout o/main; git commit",
+            "beforeCommand": "git fakeCreateRemote"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Commit sekali dari `main`, lalu pindah ke `o/main` dan commit sekali lagi.",
+              "",
+              "Ini akan membuatmu benar-benar merasakan bedanya cabang remote: dia hanya ikut berubah kalau gudang jauhnya berubah."
+            ]
+          }
+        }
+      ]
+    }
   },
   "fetch": {
     "name": "Ambil Kabar (fetch)",
-    "hint": "Cukup jalankan git fetch!"
+    "hint": "Cukup jalankan git fetch!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Git Fetch",
+              "",
+              "Bekerja dengan remote sebenarnya cuma soal **memindahkan data** ke sana dan dari sana. Selama commit bisa dikirim bolak-balik, apa pun bisa dibagi: kode, file baru, ide baru, apa saja.",
+              "",
+              "Di pelajaran ini kita belajar mengambil data **dari** gudang jauh. Perintahnya pas sekali namanya: `git fetch`.",
+              "",
+              "Nanti kamu akan lihat, begitu gambaran kita tentang remote diperbarui, cabang remote (`o/main`) ikut bergeser mengikutinya."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sebelum masuk ke detailnya, ayo lihat dulu. Di sini gudang jauh punya dua commit yang belum ada di gudang kita."
+            ],
+            "afterMarkdowns": [
+              "Nah! Commit `C2` dan `C3` sudah terunduh ke gudang kita, dan cabang `o/main` ikut maju mengikutinya."
+            ],
+            "command": "git fetch",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork 2"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Apa yang dilakukan fetch",
+              "",
+              "`git fetch` cuma melakukan **dua hal**, tidak lebih:",
+              "",
+              "* mengunduh commit yang dimiliki remote tapi belum kamu punya, lalu...",
+              "* menggeser cabang remote-mu (misalnya `o/main`) ke posisi terbaru",
+              "",
+              "Intinya, `git fetch` menyamakan gambaranmu tentang gudang jauh dengan keadaan **sebenarnya** di sana sekarang.",
+              "",
+              "Ingat pelajaran sebelumnya? Cabang remote menunjukkan keadaan remote *sejak terakhir kali* kamu mengobrol dengannya. Nah, `git fetch` itulah cara mengobrolnya!"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Yang TIDAK dilakukan fetch",
+              "",
+              "Ini penting: `git fetch` **tidak mengubah pekerjaanmu sendiri sama sekali**. Cabang `main` milikmu tidak bergerak, file-filemu juga tidak berubah.",
+              "",
+              "Banyak orang salah paham dan mengira setelah `git fetch` pekerjaan mereka jadi ikut terbaru. Padahal tidak. Fetch cuma mengunduh bahannya saja.",
+              "",
+              "Jadi anggap saja `git fetch` itu tombol **unduh**. Cara memakai hasil unduhannya kita pelajari di level berikutnya. :D"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Cukup jalankan `git fetch` untuk mengunduh semua commit-nya!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "pull": {
     "name": "Tarik Semua (pull)",
-    "hint": "Cukup jalankan git pull!"
+    "hint": "Cukup jalankan git pull!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Git Pull",
+              "",
+              "Kita sudah bisa mengunduh dengan `git fetch`. Sekarang, bagaimana cara memakai hasil unduhan itu?",
+              "",
+              "Sebenarnya banyak caranya. Begitu commit-nya ada di komputermu, dia jadi commit biasa yang bisa kamu perlakukan sesukamu:",
+              "",
+              "* `git cherry-pick o/main`",
+              "* `git rebase o/main`",
+              "* `git merge o/main`",
+              "* dan seterusnya",
+              "",
+              "Karena urutan \"fetch lalu merge\" itu **sangat sering** dipakai, Git menyediakan satu perintah yang melakukan keduanya sekaligus: `git pull`.",
+              "",
+              "*Catatan: di Git versi baru, `git pull` polos akan berhenti dan bertanya kalau sejarahnya bercabang dua. Kamu bisa pilih `git pull --no-rebase` untuk merge, atau `git pull --rebase` untuk rebase. Di game ini, `git pull` otomatis berarti merge.*"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Pertama, ayo lihat `fetch` lalu `merge` dijalankan berurutan."
+            ],
+            "afterMarkdowns": [
+              "Mantap! Kita mengunduh `C3` dengan `fetch`, lalu menggabungkannya dengan `git merge o/main`.",
+              "",
+              "Sekarang cabang `main` kita sudah berisi pekerjaan baru dari remote."
+            ],
+            "command": "git fetch; git merge o/main",
+            "beforeCommand": "git fakeCreateRemote; git commit; git fakeTeamwork"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Apa yang terjadi kalau kita pakai `git pull` saja?"
+            ],
+            "afterMarkdowns": [
+              "Sama persis! Jadi jelas ya: `git pull` itu singkatan dari `git fetch` lalu merge cabang yang barusan diunduh."
+            ],
+            "command": "git pull",
+            "beforeCommand": "git fakeCreateRemote; git commit; git fakeTeamwork"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Nanti kita bahas `git pull` lebih dalam (termasuk pilihan-pilihannya). Sekarang coba dulu di level ini.",
+              "",
+              "Ingat, kamu sebenarnya bisa juga menyelesaikannya dengan `fetch` + `merge`. Tapi itu butuh satu perintah lebih banyak. :P"
+            ]
+          }
+        }
+      ]
+    }
   },
   "fakeTeamwork": {
     "name": "Pura-pura Ada Teman",
-    "hint": "Ingat, kamu bisa menentukan berapa banyak commit yang dibuat"
+    "hint": "Ingat, kamu bisa menentukan berapa banyak commit yang dibuat",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Pura-pura punya teman",
+              "",
+              "Ada masalah kecil: di level-level berikutnya kamu harus belajar menarik perubahan yang dibuat orang lain di remote.",
+              "",
+              "Masalahnya, di sini cuma ada kamu. Jadi kita perlu **berpura-pura** bahwa ada teman yang mengirim pekerjaan ke remote.",
+              "",
+              "Untuk itu ada perintah `git fakeTeamwork`! Namanya sudah menjelaskan sendiri. Ayo lihat contohnya..."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kalau dipakai polos, `fakeTeamwork` cuma menaruh satu commit di cabang main milik remote."
+            ],
+            "afterMarkdowns": [
+              "Nah -- gudang jauhnya dapat commit baru. Tapi kita belum punya commit itu, karena kita belum menjalankan `git fetch`."
+            ],
+            "command": "git fakeTeamwork",
+            "beforeCommand": "git fakeCreateRemote"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kamu juga bisa menyebutkan nama cabang dan berapa banyak commit yang mau dibuat."
+            ],
+            "afterMarkdowns": [
+              "Cuma dengan satu perintah, kita berpura-pura teman kita mengirim tiga commit ke cabang `foo` di remote."
+            ],
+            "command": "git fakeTeamwork foo 3",
+            "beforeCommand": "git branch foo; git fakeCreateRemote"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Level berikutnya bakal lumayan susah, jadi di sini kamu diminta melakukan beberapa hal sekaligus:",
+              "",
+              "* Salin gudang jauhnya (`git clone`)",
+              "* Pura-pura ada teman yang mengirim pekerjaan ke sana",
+              "* Bikin satu commit sendiri",
+              "* Lalu tarik perubahan dari remote dan gabungkan",
+              "",
+              "Seperti beberapa pelajaran digabung jadi satu!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "push": {
     "name": "Kirim Kerjaan (push)",
-    "hint": "Ingat, kamu harus clone dulu sebelum bisa push!"
+    "hint": "Ingat, kamu harus clone dulu sebelum bisa push!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Git Push",
+              "",
+              "Oke, kita sudah bisa mengambil pekerjaan orang lain. Tapi bagaimana caranya membagikan **pekerjaan kita** ke semua orang?",
+              "",
+              "Gampang: kalau kebalikan dari mengunduh adalah mengunggah, maka kebalikan dari `git pull` adalah... `git push`!",
+              "",
+              "`git push` bertugas mengunggah perubahanmu ke remote dan memperbarui remote itu supaya berisi commit barumu. Begitu selesai, semua temanmu bisa mengunduh hasil kerjamu.",
+              "",
+              "Anggap saja `git push` itu tombol \"terbitkan\". Ada beberapa hal rumit yang nanti kita bahas, tapi ayo mulai dari yang paling sederhana dulu..."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Di sini kita punya perubahan yang belum dimiliki remote. Ayo kita unggah!"
+            ],
+            "afterMarkdowns": [
+              "Nah! Remote menerima commit `C2`, cabang `main` di sana ikut maju ke `C2`, dan gambaran kita tentang remote (`o/main`) juga ikut diperbarui.",
+              "",
+              "Semuanya sudah seragam!"
+            ],
+            "command": "git push",
+            "beforeCommand": "git fakeCreateRemote; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Bagikan dua commit baru ke remote.",
+              "",
+              "Siap-siap ya, karena mulai sesudah ini pelajarannya jadi jauh lebih menantang!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "fetchRebase": {
     "name": "Sejarah Bercabang Dua",
-    "hint": "Perhatikan urutan dari gambar target"
+    "hint": "Perhatikan urutan dari gambar target",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Sejarah Bercabang Dua",
+              "",
+              "Sejauh ini kita sudah bisa `pull` untuk mengambil pekerjaan orang lain, dan `push` untuk membagikan pekerjaan kita. Kelihatannya gampang. Lalu kenapa banyak orang bingung soal ini?",
+              "",
+              "Kesulitannya muncul kalau sejarahnya **bercabang dua**. Sebelum membahas detailnya, ayo lihat contohnya dulu..."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Bayangkan hari Senin kamu menyalin sebuah proyek, lalu mulai mengerjakan fitur kecil.",
+              "",
+              "Hari Jumat fiturmu siap diterbitkan -- tapi aduh! Selama seminggu itu teman-temanmu sudah menulis banyak kode baru, dan pekerjaanmu jadi ketinggalan zaman. Mereka juga sudah mengirimkannya ke remote.",
+              "",
+              "Jadi sekarang pekerjaanmu dibangun di atas versi **lama** yang sudah tidak berlaku.",
+              "",
+              "Kalau kamu jalankan `git push`, Git jadi bingung. Apakah dia harus mengembalikan remote ke keadaan hari Senin? Atau menyisipkan kodemu tanpa menghapus kode baru? Atau mengabaikan pekerjaanmu?",
+              "",
+              "Karena terlalu banyak kemungkinan, Git **menolak** push-mu. Kamu dipaksa menyesuaikan diri dengan keadaan remote terbaru dulu sebelum boleh berbagi."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kebanyakan ngobrol! Ayo lihat langsung keadaannya."
+            ],
+            "afterMarkdowns": [
+              "Lihat? Tidak terjadi apa-apa, karena perintahnya gagal.",
+              "",
+              "`git push` ditolak karena commit terbarumu `C3` dibangun di atas remote versi `C1`. Padahal remote sudah maju ke `C2`. Jadi Git menolak."
+            ],
+            "command": "git push",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Bagaimana cara membereskannya? Gampang: pindahkan pekerjaanmu supaya berdiri di atas versi remote yang terbaru.",
+              "",
+              "Ada beberapa cara, tapi yang paling lurus adalah memindahkannya pakai **rebase**. Ayo lihat."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sekarang coba kita rebase dulu sebelum push..."
+            ],
+            "afterMarkdowns": [
+              "Berhasil! Kita perbarui gambaran remote dengan `git fetch`, pindahkan pekerjaan kita ke atas yang terbaru dengan rebase, lalu kirim dengan `git push`."
+            ],
+            "command": "git fetch; git rebase o/main; git push",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Apakah ada cara lain kalau remote sudah berubah? Tentu ada! Ayo coba hal yang sama tapi pakai `merge`.",
+              "",
+              "Merge memang tidak memindahkan pekerjaanmu, dia cuma membuat satu commit gabungan. Tapi itu sudah cukup untuk memberitahu Git bahwa kamu sudah memasukkan semua perubahan dari remote.",
+              "",
+              "Kenapa cukup? Karena setelah merge, cabang remote jadi **nenek moyang** cabangmu. Artinya commit-mu sudah mencakup semua yang ada di sana.",
+              "",
+              "Ayo lihat contohnya..."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sekarang kita merge, bukan rebase..."
+            ],
+            "afterMarkdowns": [
+              "Berhasil juga! Kita perbarui gambaran remote dengan `git fetch`, *gabungkan* pekerjaan baru itu ke pekerjaan kita, lalu kirim dengan `git push`."
+            ],
+            "command": "git fetch; git merge o/main; git push",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Keren! Tapi apa tidak ada cara yang lebih singkat, biar tidak mengetik sebanyak itu?",
+              "",
+              "Tentu ada. Kamu sudah tahu `git pull` itu singkatan dari fetch + merge. Nah, kebetulan sekali `git pull --rebase` adalah singkatan dari fetch + rebase!",
+              "",
+              "Ayo lihat versi singkatnya bekerja."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Pertama pakai `--rebase`..."
+            ],
+            "afterMarkdowns": [
+              "Sama seperti tadi! Cuma jauh lebih pendek."
+            ],
+            "command": "git pull --rebase; git push",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sekarang pakai `pull` biasa."
+            ],
+            "afterMarkdowns": [
+              "Lagi-lagi sama persis seperti sebelumnya!"
+            ],
+            "command": "git pull; git push",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Alur \"ambil, gabungkan, kirim\" ini sangat sering dipakai sehari-hari. Ayo coba sekarang.",
+              "",
+              "Langkah-langkahnya:",
+              "",
+              "* Salin gudangnya (`clone`)",
+              "* Pura-pura ada teman yang mengirim satu commit",
+              "* Bikin satu commit sendiri",
+              "* Terbitkan pekerjaanmu lewat **rebase**"
+            ]
+          }
+        }
+      ]
+    }
   },
   "lockedMain": {
     "name": "Main Dikunci",
-    "hint": "Bikin cabang feature dari main lokal dulu, baru kembalikan main supaya sama dengan main milik origin"
+    "hint": "Bikin cabang feature dari main lokal dulu, baru kembalikan main supaya sama dengan main milik origin",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Ditolak Remote!",
+              "",
+              "Kalau kamu bekerja di tim besar, biasanya cabang `main` **dikunci**. Perubahan tidak boleh langsung masuk, harus lewat proses pemeriksaan dulu (namanya Pull Request).",
+              "",
+              "Kalau kamu nekat commit langsung ke `main` lalu push, kamu akan disambut pesan seperti ini:",
+              "",
+              "```",
+              " ! [remote rejected] main -> main (Pushes to this branch are not permitted; you must use a pull request to update this branch.)",
+              "```"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Kenapa ditolak?",
+              "",
+              "Remote menolak karena ada aturan di cabang `main`: semua perubahan wajib lewat Pull Request.",
+              "",
+              "Sebenarnya kamu berniat mengikuti aturan itu -- bikin cabang dulu, kirim cabangnya, baru minta diperiksa. Tapi kamu lupa, dan malah langsung commit ke `main`.",
+              "",
+              "Sekarang kamu tersangkut dan tidak bisa mengirim pekerjaanmu."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Cara membereskannya",
+              "",
+              "Buat cabang baru bernama `feature`, lalu kirim cabang itu ke remote.",
+              "",
+              "Jangan lupa juga kembalikan `main` milikmu supaya sama lagi dengan `main` milik remote. Kalau tidak, nanti waktu kamu `pull` lagi, commit-mu bisa bentrok dengan commit orang lain."
+            ]
+          }
+        }
+      ]
+    }
   },
   "pushManyFeatures": {
-    "name": "Push Main!",
-    "hint": "Ingat kamu selalu bisa memakai perintah undo atau reset"
+    "name": "Kirim Semua ke Main!",
+    "hint": "Ingat kamu selalu bisa memakai perintah undo atau reset",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Menggabungkan Cabang Fitur",
+              "",
+              "Sekarang kamu sudah lancar fetch, pull, dan push. Ayo kita pakai semuanya dalam satu alur kerja baru.",
+              "",
+              "Di proyek besar, biasanya orang mengerjakan tiap fitur di cabangnya sendiri (bercabang dari `main`), lalu menggabungkannya kalau sudah benar-benar siap.",
+              "",
+              "Banyak orang hanya push dan pull saat sedang berada di `main`. Dengan begitu `main` selalu sama dengan yang ada di remote (`o/main`).",
+              "",
+              "Jadi di alur kerja ini kita menggabungkan dua hal:",
+              "",
+              "* memasukkan pekerjaan dari cabang fitur ke `main`, dan",
+              "* mengambil serta mengirim ke remote"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo kita ingat lagi sebentar cara memperbarui `main` lalu mengirim pekerjaan."
+            ],
+            "afterMarkdowns": [
+              "Dua perintah tadi melakukan ini:",
+              "",
+              "* memindahkan pekerjaan kita ke atas commit baru dari remote, lalu",
+              "* menerbitkan pekerjaan kita ke remote"
+            ],
+            "command": "git pull --rebase; git push",
+            "beforeCommand": "git fakeCreateRemote; git commit; git fakeTeamwork"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Level ini lumayan berat. Ini garis besarnya:",
+              "",
+              "* Ada tiga cabang fitur: `side1`, `side2`, dan `side3`",
+              "* Kirim ketiganya ke remote, **berurutan**",
+              "* Remote juga sudah berubah, jadi pekerjaan orang lain harus ikut kamu masukkan",
+              "",
+              ":O seru! Kalau kamu berhasil menyelesaikan level ini, itu kemajuan besar."
+            ]
+          }
+        }
+      ]
+    }
   },
   "mergeManyFeatures": {
     "name": "Merge Bareng Remote",
-    "hint": "Perhatikan baik-baik gambar targetnya!"
+    "hint": "Perhatikan baik-baik gambar targetnya!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Kenapa tidak merge saja?",
+              "",
+              "Supaya bisa mengirim perubahan ke remote, yang kamu butuhkan cuma satu: **memasukkan perubahan terbaru dari remote** ke pekerjaanmu.",
+              "",
+              "Artinya kamu boleh pakai rebase **atau** merge dari cabang remote (misalnya `o/main`). Dua-duanya sah.",
+              "",
+              "Kalau begitu, kenapa dari tadi kita selalu pakai rebase? Kenapa `merge` seperti dianaktirikan?"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Soal rebase vs merge itu memang sering diperdebatkan para programmer. Ini untung ruginya rebase:",
+              "",
+              "Untungnya:",
+              "",
+              "* Pohon commit-mu jadi terlihat rapi, semuanya lurus satu garis",
+              "",
+              "Ruginya:",
+              "",
+              "* Rebase mengubah tampilan sejarahnya.",
+              "",
+              "Contohnya, commit `C1` bisa dipindah ke **belakang** `C3`. Jadi seolah-olah `C1'` dikerjakan setelah `C3`, padahal aslinya dikerjakan duluan.",
+              "",
+              "Sebagian orang lebih suka menjaga sejarah apa adanya, jadi mereka pilih merge. Sebagian lain lebih suka pohon yang rapi, jadi pilih rebase. Ini soal selera saja. :D"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Selesaikan level yang sama seperti sebelumnya, tapi kali ini pakai **merge**.",
+              "",
+              "Hasilnya mungkin terlihat agak kusut, tapi justru itu yang mau ditunjukkan."
+            ]
+          }
+        }
+      ]
+    }
   },
   "tracking": {
     "name": "Melacak Cabang Remote",
-    "hint": "Ingat ada dua cara untuk mengatur pelacakan remote!"
+    "hint": "Ingat ada dua cara untuk mengatur pelacakan remote!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Cabang yang saling terhubung",
+              "",
+              "Ada satu hal yang mungkin terasa \"ajaib\" di pelajaran-pelajaran tadi: Git tahu bahwa cabang `main` itu berpasangan dengan `o/main`.",
+              "",
+              "Memang namanya mirip, tapi hubungannya benar-benar nyata dan terlihat jelas di dua tempat:",
+              "",
+              "* Waktu `pull`, commit diunduh ke `o/main`, lalu digabungkan ke `main`. Git tahu harus menggabungkan ke mana karena hubungan ini.",
+              "* Waktu `push`, pekerjaan dari `main` dikirim ke cabang `main` milik remote. Git tahu tujuannya juga karena hubungan ini."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Melacak cabang remote",
+              "",
+              "Singkatnya, hubungan antara `main` dan `o/main` itu namanya **remote tracking**. Cabang `main` disetel untuk melacak `o/main`. Dari situ Git tahu tujuan merge dan tujuan push-nya.",
+              "",
+              "Kamu mungkin heran, kapan setelan itu dibuat? Kamu kan tidak pernah mengetik perintah apa pun untuk itu.",
+              "",
+              "Jawabannya: waktu kamu `git clone`, Git otomatis menyetelnya untukmu.",
+              "",
+              "Saat clone, Git membuat cabang remote untuk setiap cabang di sana (seperti `o/main`). Lalu dia membuat satu cabang lokal yang melacak cabang yang sedang aktif di remote, biasanya `main`.",
+              "",
+              "Jadi setelah clone kamu cuma punya satu cabang lokal (biar tidak pusing), tapi tetap bisa melihat semua cabang yang ada di remote. Enak, kan!",
+              "",
+              "Itu sebabnya kadang kamu melihat pesan seperti ini saat clone:",
+              "",
+              "    local branch \"main\" set to track remote branch \"o/main\""
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Bisa disetel sendiri?",
+              "",
+              "Bisa dong! Cabang apa pun boleh kamu suruh melacak `o/main`. Kalau begitu, cabang itu punya tujuan push dan tujuan merge yang sama seperti `main`.",
+              "",
+              "Artinya kamu bisa menjalankan `git push` di cabang bernama `bukanMainSamaSekali`, dan pekerjaanmu tetap terkirim ke cabang `main` di remote!",
+              "",
+              "Ada dua cara menyetelnya. Cara pertama: bikin cabang baru dengan cabang remote sebagai acuannya.",
+              "",
+              "`git checkout -b bukanMainSamaSekali o/main`",
+              "",
+              "Itu membuat cabang baru sekaligus menyetelnya melacak `o/main`."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Cukup ngobrolnya, ayo lihat! Kita bikin cabang baru bernama `foo` dan menyuruhnya melacak `main` milik remote."
+            ],
+            "afterMarkdowns": [
+              "Lihat, Git memakai `o/main` sebagai tujuan merge untuk memperbarui cabang `foo`.",
+              "",
+              "Perhatikan: cabang `main` sama sekali tidak ikut berubah!"
+            ],
+            "command": "git checkout -b foo o/main; git pull",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ini juga berlaku untuk `git push`."
+            ],
+            "afterMarkdowns": [
+              "Nah! Pekerjaan kita terkirim ke cabang `main` di remote, padahal nama cabang kita beda sama sekali."
+            ],
+            "command": "git checkout -b foo o/main; git commit; git push",
+            "beforeCommand": "git fakeCreateRemote"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Cara kedua",
+              "",
+              "Cara lain menyetelnya adalah dengan pilihan `git branch -u`. Menjalankan:",
+              "",
+              "`git branch -u o/main foo`",
+              "",
+              "akan menyuruh cabang `foo` melacak `o/main`. Kalau kamu memang sedang berada di `foo`, nama cabangnya boleh tidak ditulis:",
+              "",
+              "`git branch -u o/main`"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo lihat sebentar cara kedua ini bekerja..."
+            ],
+            "afterMarkdowns": [
+              "Hasilnya sama saja, cuma perintahnya lebih gamblang. Mantap!"
+            ],
+            "command": "git branch -u o/main foo; git commit; git push",
+            "beforeCommand": "git fakeCreateRemote; git checkout -b foo"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Kirim pekerjaan ke cabang `main` di remote, tapi **tanpa** berada di `main` secara lokal.",
+              "",
+              "Sebagai gantinya, buat cabang bernama `side` seperti yang ditunjukkan gambar target."
+            ]
+          }
+        }
+      ]
+    }
   },
   "pushArgs": {
     "name": "Argumen git push",
-    "hint": "Kamu selalu bisa melihat slide terakhir dengan tombol \"Misi\""
+    "hint": "Kamu selalu bisa melihat slide terakhir dengan tombol \"Misi\"",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Argumen git push",
+              "",
+              "Bagus! Sekarang kamu sudah paham cabang remote tracking, jadi kita bisa membongkar rahasia cara kerja `push`, `fetch`, dan `pull`. Kita bahas satu-satu, tapi idenya mirip semua.",
+              "",
+              "Mulai dari `git push`. Kamu sudah tahu Git menebak remote **dan** cabang tujuannya dari setelan cabang yang sedang kamu tempati.",
+              "",
+              "Itu kalau kamu tidak memberi argumen. Padahal `git push` bisa diberi argumen begini:",
+              "",
+              "`git push <remote> <tempat>`"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Apa itu `<tempat>`? Nanti kita bahas detailnya, tapi lihat contohnya dulu. Perintah:",
+              "",
+              "`git push origin main`",
+              "",
+              "artinya kira-kira begini kalau dibaca:",
+              "",
+              "*\"Pergi ke cabang bernama `main` di gudangku, ambil semua commit-nya. Lalu pergi ke cabang `main` di remote bernama `origin`. Taruh commit yang belum ada di sana, dan beritahu aku kalau sudah selesai.\"*",
+              "",
+              "Dengan menulis `main` sebagai \"tempat\", kita memberitahu Git dari mana commit-nya diambil **dan** ke mana harus ditaruh.",
+              "",
+              "Ingat ya: karena kita sudah memberitahu Git semuanya, dia jadi **tidak peduli** kamu sedang berada di cabang mana!"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo lihat contoh dengan argumen. Perhatikan baik-baik kita sedang berada di mana pada contoh ini."
+            ],
+            "afterMarkdowns": [
+              "Nah! Cabang `main` di remote tetap ikut diperbarui, karena kita menyebutkan argumennya."
+            ],
+            "command": "git checkout C0; git push origin main",
+            "beforeCommand": "git fakeCreateRemote; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Bagaimana kalau argumennya tidak kita sebutkan? Apa yang terjadi?"
+            ],
+            "afterMarkdowns": [
+              "Perintahnya gagal, seperti yang kamu lihat. Itu karena `HEAD` sedang tidak berada di cabang yang melacak remote."
+            ],
+            "command": "git checkout C0; git push",
+            "beforeCommand": "git fakeCreateRemote; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Perbarui cabang `foo` **dan** `main` di remote.",
+              "",
+              "Tantangannya: perintah `git checkout` dimatikan di level ini!",
+              "",
+              "*Catatan: cabang remote ditulis berawalan `o/` karena tulisan `origin/` kepanjangan untuk layar kita. Tapi saat mengetik perintah, pakai `origin` seperti biasa ya.*"
+            ]
+          }
+        }
+      ]
+    }
   },
   "pushArgs2": {
     "name": "Argumen git push -- Lanjutan!",
-    "hint": "Perhatikan, nama commit-nya bisa tertukar!"
+    "hint": "Perhatikan, nama commit-nya bisa tertukar!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Bedah argumen `<tempat>`",
+              "",
+              "Ingat pelajaran tadi: waktu kita menulis `main` sebagai tempat, itu sekaligus menentukan **asal** commit dan **tujuan**nya.",
+              "",
+              "Nah, bagaimana kalau kita mau asal dan tujuannya **berbeda**? Misalnya mengirim commit dari cabang `foo` di komputer kita ke cabang `bar` di remote?",
+              "",
+              "Sayangnya di Git itu tidak mungkin... bohong deng! :) Tentu saja bisa. Git itu lentur sekali, malah kadang kelewat lentur.",
+              "",
+              "Ayo lihat caranya di halaman berikutnya..."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Untuk menyebut asal dan tujuan sekaligus, sambungkan keduanya pakai titik dua:",
+              "",
+              "`git push origin <asal>:<tujuan>`",
+              "",
+              "Ini namanya *colon refspec*. \"Refspec\" itu cuma istilah keren untuk lokasi yang bisa dimengerti Git, misalnya cabang `foo` atau bahkan `HEAD~1`.",
+              "",
+              "Begitu kamu bisa menyebut asal dan tujuan sendiri-sendiri, perintah remote-mu jadi bisa sangat teliti. Ayo lihat contohnya!"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ingat, `asal` boleh berupa lokasi apa pun yang dimengerti Git:"
+            ],
+            "afterMarkdowns": [
+              "Wow! Perintahnya terlihat aneh, tapi masuk akal: Git mengartikan `foo^` jadi sebuah lokasi, mengunggah commit yang belum ada di remote, lalu memperbarui tujuannya."
+            ],
+            "command": "git push origin foo^:main",
+            "beforeCommand": "git fakeCreateRemote; go -b foo; git commit; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Bagaimana kalau cabang tujuannya belum ada? Santai! Sebut saja namanya, nanti Git membuatkannya di remote."
+            ],
+            "afterMarkdowns": [
+              "Keren ya, praktis banget. :D"
+            ],
+            "command": "git push origin main:newBranch",
+            "beforeCommand": "git fakeCreateRemote; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Capailah keadaan seperti gambar target.",
+              "",
+              "Ingat bentuknya ya: `<asal>:<tujuan>`"
+            ]
+          }
+        }
+      ]
+    }
   },
   "fetchArgs": {
     "name": "Argumen git fetch",
-    "hint": "Perhatikan bagaimana nama commit bisa bertukar! Kamu bisa membaca slide lagi lewat tombol \"Misi\""
+    "hint": "Perhatikan bagaimana nama commit bisa bertukar! Kamu bisa membaca slide lagi lewat tombol \"Misi\"",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Argumen git fetch",
+              "",
+              "Kita baru saja belajar argumen `git push`, termasuk `<tempat>` dan colon refspec (`<asal>:<tujuan>`). Apakah ilmu itu bisa dipakai untuk `git fetch` juga?",
+              "",
+              "Tentu bisa! Argumen `git fetch` **sangat mirip** dengan `git push`. Idenya sama persis, cuma arahnya terbalik, karena sekarang kita mengunduh, bukan mengunggah.",
+              "",
+              "Ayo bahas satu per satu..."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Bagian `<tempat>`",
+              "",
+              "Kalau kamu menyebut tempat pada git fetch, misalnya:",
+              "",
+              "`git fetch origin foo`",
+              "",
+              "Git akan pergi ke cabang `foo` di remote, mengambil semua commit yang belum kamu punya, lalu menaruhnya di cabang `o/foo` di komputermu.",
+              "",
+              "Ayo lihat lagi supaya ingat."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Dengan menyebut sebuah tempat..."
+            ],
+            "afterMarkdowns": [
+              "Kita cuma mengunduh commit dari `foo`, dan menaruhnya di `o/foo`."
+            ],
+            "command": "git fetch origin foo",
+            "beforeCommand": "git branch foo; git fakeCreateRemote; git fakeTeamwork foo 2"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Kamu mungkin bertanya: kenapa commit-nya ditaruh di `o/foo`, bukan langsung ke cabang `foo` milikku? Bukankah `<tempat>` itu tempat yang ada di dua-duanya?",
+              "",
+              "Git sengaja bikin pengecualian di sini, karena bisa saja kamu punya pekerjaan di cabang `foo` yang belum selesai. Sayang kalau tertimpa!",
+              "",
+              "Ini nyambung dengan pelajaran `git fetch` yang dulu: fetch **tidak pernah** mengubah cabang lokalmu. Dia cuma mengunduh commit, supaya bisa kamu periksa atau gabungkan nanti."
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "\"Kalau begitu, apa yang terjadi kalau aku menyebut asal dan tujuan sekaligus pakai `<asal>:<tujuan>`?\"",
+              "",
+              "Kalau kamu memang nekat mau mengunduh commit **langsung** ke cabang lokal, ya boleh. Syaratnya cuma satu: cabang tujuannya tidak boleh sedang kamu tempati.",
+              "",
+              "Tapi ada yang harus kamu perhatikan: sekarang `<asal>` itu tempat di **remote**, dan `<tujuan>` itu tempat di **komputermu**. Persis kebalikan dari git push!",
+              "",
+              "Masuk akal kan, karena arah perpindahan datanya juga terbalik.",
+              "",
+              "Sebenarnya jarang ada yang memakai cara ini sehari-hari. Aku tunjukkan supaya kamu paham bahwa `fetch` dan `push` itu memang mirip, cuma berlawanan arah."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo lihat keanehan ini bekerja:"
+            ],
+            "afterMarkdowns": [
+              "Wow! Git mengartikan `C2` sebagai lokasi di remote, lalu mengunduh commit-nya ke `bar`, yang merupakan cabang lokal."
+            ],
+            "command": "git fetch origin C2:bar",
+            "beforeCommand": "git branch foo; git fakeCreateRemote; git branch bar; git fakeTeamwork foo 2"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Bagaimana kalau cabang tujuannya belum ada? Ayo ulangi contoh tadi, tapi kali ini `bar` belum dibuat."
+            ],
+            "afterMarkdowns": [
+              "Lihat, persis seperti git push. Git membuatkan cabang tujuannya dulu di komputermu, sama seperti git push yang membuatkan cabang tujuan di remote kalau belum ada."
+            ],
+            "command": "git fetch origin C2:bar",
+            "beforeCommand": "git branch foo; git fakeCreateRemote; git fakeTeamwork foo 2"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Tanpa argumen?",
+              "",
+              "Kalau `git fetch` dijalankan polos tanpa argumen, dia mengunduh semua commit dari remote ke semua cabang remote..."
+            ],
+            "afterMarkdowns": [
+              "Sederhana, tapi perlu dilihat sekali biar jelas."
+            ],
+            "command": "git fetch",
+            "beforeCommand": "git branch foo; git fakeCreateRemote; git fakeTeamwork foo; git fakeTeamwork main"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Cukup ngobrolnya! Unduh persis commit-commit yang ditunjukkan gambar target. Silakan pamer perintah keren!",
+              "",
+              "Kamu harus menyebutkan asal dan tujuan untuk kedua perintah fetch-nya. Perhatikan baik-baik gambar targetnya, karena nama commit-nya bisa tertukar!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "sourceNothing": {
     "name": "Sumbernya Kosong",
-    "hint": "Perintah branch dimatikan di level ini, jadi kamu harus pakai fetch!"
+    "hint": "Perintah branch dimatikan di level ini, jadi kamu harus pakai fetch!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "### Keanehan `<asal>`",
+              "",
+              "Git memakai bagian `<asal>` untuk dua hal yang agak aneh. Keanehan ini muncul karena kamu boleh menulis \"kosong\" sebagai asal, baik untuk push maupun fetch.",
+              "",
+              "Caranya: kosongkan saja bagian sebelum titik dua.",
+              "",
+              "* `git push origin :side`",
+              "* `git fetch origin :bugFix`",
+              "",
+              "Ayo lihat apa yang terjadi..."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Apa jadinya kalau kita mengirim \"kosong\" ke sebuah cabang di remote? Cabangnya **dihapus**!"
+            ],
+            "afterMarkdowns": [
+              "Nah, cabang `foo` di remote berhasil dihapus, cuma dengan mengirimkan \"kekosongan\" ke sana. Lumayan masuk akal juga..."
+            ],
+            "command": "git push origin :foo",
+            "beforeCommand": "git fakeCreateRemote; git push origin main:foo"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sebaliknya, mengunduh \"kosong\" ke sebuah tempat di komputermu malah **membuat cabang baru**."
+            ],
+            "afterMarkdowns": [
+              "Aneh sekali ya, tapi ya sudahlah. Begitulah Git!"
+            ],
+            "command": "git fetch origin :bar",
+            "beforeCommand": "git fakeCreateRemote"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Level ini singkat kok. Hapus satu cabang di remote, lalu buat satu cabang baru pakai `git fetch`. Selesai!"
+            ]
+          }
+        }
+      ]
+    }
   },
   "pullArgs": {
     "name": "Argumen git pull",
-    "hint": "Ingat kamu bisa membuat cabang lokal baru lewat argumen fetch/pull"
+    "hint": "Ingat kamu bisa membuat cabang lokal baru lewat argumen fetch/pull",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Argumen git pull",
+              "",
+              "Sekarang kamu sudah tahu hampir **semua** tentang argumen `git fetch` dan `git push`. Jadi hampir tidak ada yang tersisa untuk `git pull`. :)",
+              "",
+              "Kenapa? Karena `git pull` itu ujung-ujungnya cuma singkatan dari: fetch dulu, lalu gabungkan apa yang barusan diunduh.",
+              "",
+              "Anggap saja dia menjalankan `git fetch` dengan argumen yang **sama**, lalu menggabungkan dari **tempat commit itu mendarat**.",
+              "",
+              "Ini berlaku bahkan untuk argumen yang rumit sekalipun. Ayo lihat contohnya:"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "Ini pasangan perintah yang artinya sama persis:",
+              "",
+              "`git pull origin foo` sama dengan:",
+              "",
+              "`git fetch origin foo; git merge o/foo`",
+              "",
+              "Lalu...",
+              "",
+              "`git pull origin bar:bugFix` sama dengan:",
+              "",
+              "`git fetch origin bar:bugFix; git merge bugFix`",
+              "",
+              "Lihat kan? `git pull` memang cuma singkatan dari fetch + merge. Yang dia pedulikan cuma satu: di mana commit-nya mendarat waktu fetch tadi.",
+              "",
+              "Ayo lihat contohnya:"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kalau kita menyebut tempat yang mau di-fetch, semuanya berjalan seperti fetch biasa, lalu hasilnya digabungkan."
+            ],
+            "afterMarkdowns": [
+              "Lihat! Dengan menyebut `main`, commit-nya turun ke `o/main` seperti biasa. Lalu `o/main` digabungkan ke tempat kita berdiri sekarang -- yang **bukan** cabang `main`.",
+              "",
+              "Karena itu, kadang masuk akal menjalankan git pull berkali-kali dengan argumen yang sama dari cabang berbeda-beda, supaya beberapa cabang ikut diperbarui."
+            ],
+            "command": "git pull origin main",
+            "beforeCommand": "git fakeCreateRemote; go -b bar; git commit; git fakeTeamwork"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Apakah bisa pakai asal dan tujuan juga? Bisa dong! Ayo lihat:"
+            ],
+            "afterMarkdowns": [
+              "Wow, banyak sekali yang terjadi cuma dari satu perintah! Kita membuat cabang lokal baru bernama `foo`, mengunduh commit dari `main` milik remote ke cabang itu, lalu menggabungkan `foo` ke cabang yang sedang kita tempati, yaitu `bar`."
+            ],
+            "command": "git pull origin main:foo",
+            "beforeCommand": "git fakeCreateRemote; git fakeTeamwork; go -b bar; git commit"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "",
+              "Terakhir nih! Capailah keadaan seperti gambar target.",
+              "",
+              "Kamu perlu mengunduh beberapa commit, membuat cabang baru, dan menggabungkan cabang ke cabang lain. Tapi tenang, tidak butuh banyak perintah kok. :P"
+            ]
+          }
+        }
+      ]
+    }
   }
 }

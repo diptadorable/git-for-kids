@@ -365,6 +365,23 @@ export class GitRepo {
     this.branches[name].target = this.resolve(ref);
   }
 
+  /**
+   * `git branch -u <remote-branch> [branch]` -- point a local branch at the
+   * remote branch it should pull from and push to. The tracking lesson
+   * teaches this as the explicit alternative to `git checkout -b foo o/main`.
+   */
+  setUpstream(remoteBranchName: string, branchName?: string) {
+    const remote = this.branches[remoteBranchName];
+    if (!remote) throw new GitError(`Branch "${remoteBranchName}" not found`);
+    if (!remoteBranchName.startsWith('o/')) {
+      throw new GitError(`"${remoteBranchName}" is not a remote branch`);
+    }
+    const localName = branchName ?? this.headTarget;
+    const local = this.branches[localName];
+    if (!local) throw new GitError(`Branch "${localName}" not found`);
+    local.remoteTrackingBranchID = remoteBranchName;
+  }
+
   deleteBranch(name: string) {
     if (!this.branches[name]) throw new GitError(`Branch "${name}" not found`);
     if (name === this.headTarget) {
@@ -571,18 +588,44 @@ export class GitRepo {
    * with an origin already populated and `clonePending` set, and the player's
    * local repo is the empty one that gets filled in.
    */
+  /**
+   * `git fakeCreateRemote` -- a teaching-only command that publishes the
+   * CURRENT local repo as a brand new origin, so a lesson demo can show
+   * remotes without walking through a clone first.
+   */
+  fakeCreateRemote() {
+    if (this.origin) throw new GitError('You already have a remote!');
+
+    const remote = GitRepo.fromTree(this.toTree());
+    remote.origin = null;
+    remote.localRepo = this;
+    this.origin = remote;
+
+    for (const [name, branch] of Object.entries(remote.branches)) {
+      const trackingName = `o/${name}`;
+      if (this.branches[trackingName]) continue;
+      this.branches[trackingName] = {
+        id: trackingName,
+        target: branch.target,
+        remoteTrackingBranchID: null,
+        type: 'branch',
+      };
+      if (this.branches[name]) {
+        this.branches[name].remoteTrackingBranchID = trackingName;
+      }
+    }
+  }
+
   clone() {
     if (this.origin && !this.clonePending) {
       throw new GitError('You already have a remote! Cannot clone again');
     }
     if (!this.origin) {
       // Nothing to clone from, so publish the local repo as the new remote.
-      const remote = GitRepo.fromTree(this.toTree());
-      remote.origin = null;
-      remote.localRepo = this;
-      this.origin = remote;
+      this.fakeCreateRemote();
+      return;
     }
-    const origin = this.origin!;
+    const origin = this.origin;
     this.clonePending = false;
 
     for (const [name, remoteBranch] of Object.entries(origin.branches)) {
@@ -680,25 +723,42 @@ export class GitRepo {
     throw new GitError(`Branch "${branchName}" is not tracking a remote branch`);
   }
 
-  pull(opts: { rebase?: boolean; source?: string; destination?: string } = {}) {
+  /**
+   * `git pull` is a fetch followed by integrating whatever was just fetched.
+   * All three argument shapes end up merging (or rebasing onto) wherever the
+   * fetch put the commits:
+   *
+   *   git pull                      -> fetch tracked branch, merge o/<tracked>
+   *   git pull origin foo           -> fetch foo,            merge o/foo
+   *   git pull origin foo:bar       -> fetch foo into bar,   merge bar
+   */
+  pull(opts: {
+    rebase?: boolean;
+    place?: string;
+    source?: string;
+    destination?: string;
+  } = {}) {
     const origin = this.requireOrigin();
 
-    // Refspec form: fetch into a named local branch, then integrate that.
+    let integrateFrom: string;
+
     if (opts.source !== undefined && opts.destination !== undefined) {
       this.fetchRefspec(opts.source, opts.destination);
-      if (opts.rebase) this.rebase(opts.destination);
-      else this.merge(opts.destination);
-      return;
+      integrateFrom = opts.destination;
+    } else {
+      // A named place does not need the current branch to track anything --
+      // you can pull origin's main while sitting on an unrelated branch.
+      const sourceName =
+        opts.place ?? this.trackedRemoteOf(this.headTarget).replace(/^o\//, '');
+      if (!origin.branches[sourceName]) {
+        throw new GitError(`Remote branch "${sourceName}" not found`);
+      }
+      this.fetch({ branches: [sourceName] });
+      integrateFrom = `o/${sourceName}`;
     }
 
-    const sourceName = this.trackedRemoteOf(this.headTarget).replace(/^o\//, '');
-    if (!origin.branches[sourceName]) {
-      throw new GitError(`Remote branch "${sourceName}" not found`);
-    }
-    this.fetch({ branches: [sourceName] });
-    const mergeFrom = `o/${sourceName}`;
-    if (opts.rebase) this.rebase(mergeFrom);
-    else this.merge(mergeFrom);
+    if (opts.rebase) this.rebase(integrateFrom);
+    else this.merge(integrateFrom);
   }
 
   push(opts: { source?: string; destination?: string } = {}) {

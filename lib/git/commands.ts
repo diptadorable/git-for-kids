@@ -108,6 +108,13 @@ export function runCommand(repo: GitRepo, line: string): CommandResult {
       if (options.d || options.D) {
         for (const name of positional) repo.deleteBranch(name);
         out.push(`Deleted branch ${positional.join(', ')}`);
+      } else if (options.u) {
+        const [remoteBranch, localBranch] = positional;
+        if (!remoteBranch) throw new GitError('usage: git branch -u <remote-branch> [branch]');
+        repo.setUpstream(remoteBranch, localBranch);
+        out.push(
+          `Branch ${localBranch ?? repo.headTarget} set up to track ${remoteBranch}`,
+        );
       } else if (options.f) {
         const [name, ref] = positional;
         if (!name || !ref) throw new GitError('usage: git branch -f <name> <ref>');
@@ -229,6 +236,12 @@ export function runCommand(repo: GitRepo, line: string): CommandResult {
       break;
     }
 
+    case 'fakeCreateRemote': {
+      repo.fakeCreateRemote();
+      out.push('Created a remote from this repository');
+      break;
+    }
+
     case 'fetch': {
       // `git fetch [origin [<source>:<destination>]]`
       const args = positional[0] === 'origin' ? positional.slice(1) : positional;
@@ -245,7 +258,11 @@ export function runCommand(repo: GitRepo, line: string): CommandResult {
       const spec = parseRefspec(args[0]);
       repo.pull({
         rebase: Boolean(options.rebase),
-        ...(spec ? { source: spec.source, destination: spec.destination } : {}),
+        ...(spec
+          ? { source: spec.source, destination: spec.destination }
+          : args[0]
+            ? { place: args[0] }
+            : {}),
       });
       out.push(options.rebase ? 'Pulled with rebase' : 'Pulled from origin');
       break;
