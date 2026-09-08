@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "conformance": "tsx scripts/conformance.ts",
-    "import-levels": "node scripts/import-levels.mjs"
+    "import-levels": "node scripts/import-levels.mjs",
+    "lesson-check": "tsx scripts/lesson-check.ts",
+    "check": "npm run conformance && npm run lesson-check && npm run lint && npm run build"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

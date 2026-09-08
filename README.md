@@ -133,18 +133,43 @@ for play.
 ```bash
 npm run dev            # local dev server
 npm run build          # production build
+npm run check          # everything below, in order
 npm run conformance    # verify all 36 levels match learnGitBranching
+npm run lesson-check   # verify every lesson demo actually runs
 npm run import-levels  # re-import level data from upstream
 ```
+
+### `npm run lesson-check`
+
+Every lesson has demo slides that run a real command to show what the prose
+just described. If the engine doesn't support that command, the demo quietly
+renders an unchanged repo — the slide still *looks* fine, so the bug is
+invisible. This check runs all 108 demos (both languages) and fails if any
+throws or leaves the repo untouched.
+
+It is not hypothetical: it is how four missing commands were found
+(`git fakeCreateRemote`, `git branch -u`, the place form of `git pull`, and
+the `go`/`gc` shortcuts), each of which would have left a player following
+the lesson with a different result than the text promised.
 
 ---
 
 ## Translation status
 
-All 36 level **names and hints** are translated to Indonesian, along with the
-whole interface.
+**Fully translated.** All 36 levels have Indonesian names, hints and lesson
+text, plus the whole interface. `untranslatedLevelIds()` in
+`lib/game/content.ts` reports zero.
 
-Full **lesson dialogs** are translated for the opening zone. Levels not yet
-translated fall back to the original English text rather than showing a blank,
-so every level is playable in both languages today. To see what is outstanding,
-`untranslatedLevelIds()` in `lib/game/content.ts` reports it.
+Translations live in `scripts/translations/` as one file per zone and are
+folded in with:
+
+```bash
+node scripts/merge-translation.mjs scripts/translations/<zone>.mjs
+```
+
+That script refuses to merge unless every demo slide still carries upstream's
+exact `command` and `beforeCommand`, so a translation can never quietly change
+what a lesson demonstrates.
+
+Two names are intentionally left in English: `Git Describe` (a command name)
+and the `o/` branch prefix.
