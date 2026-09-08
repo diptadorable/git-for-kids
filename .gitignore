@@ -42,3 +42,4 @@ next-env.d.ts
 
 # level import cache (regenerate with: node scripts/import-levels.mjs)
 .level-cache/
+!.env.example

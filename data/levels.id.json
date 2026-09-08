@@ -1,0 +1,316 @@
+{
+  "_note": "Indonesian lesson content. Upstream learnGitBranching ships 17 languages but no Indonesian, so this file is ours. Level structure, commands and demos mirror the originals exactly; only the wording is rewritten for a primary-school reader. Levels without a startDialog here fall back to the English original.",
+
+  "commits": {
+    "name": "Kenalan dengan Commit",
+    "hint": "Ketik 'git commit' dua kali untuk selesai!",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Commit itu apa sih?",
+              "Bayangkan kamu lagi main game, lalu kamu **save game**. Nah, `commit` itu tombol save-nya Git!",
+              "",
+              "Setiap kali kamu commit, Git menyimpan foto (snapshot) dari semua file kamu saat itu. Jadi kalau nanti ada yang rusak, kamu bisa balik ke save-an lama.",
+              "",
+              "Git itu pintar. Dia tidak menyalin semua file berulang-ulang. Dia cuma mencatat *apa yang berubah*. Jadi save-annya ringan dan cepat banget.",
+              "",
+              "Git juga mengingat urutan save-annya. Itu sebabnya tiap commit punya panah ke commit sebelumnya -- seperti jejak kaki yang menunjukkan jalan yang sudah kamu lewati."
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo coba langsung. Di sebelah ini ada gudang (repository) kecil. Sekarang ada dua commit: `C0` yaitu save-an pertama, dan `C1` sesudahnya.",
+              "",
+              "Pencet tombol di bawah untuk membuat commit baru."
+            ],
+            "afterMarkdowns": [
+              "Nah! Lihat, `C2` muncul dan `main` ikut maju ke commit baru itu.",
+              "",
+              "Gampang kan? Kamu baru saja menyimpan progres pertamamu."
+            ],
+            "command": "git commit",
+            "beforeCommand": ""
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Giliran kamu!",
+              "Sekarang buat **dua** commit untuk menyelesaikan level ini.",
+              "",
+              "Ketik `git commit` lalu tekan Enter. Lakukan dua kali ya!"
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "branching": {
+    "name": "Bikin Cabang Baru",
+    "hint": "Bikin cabang dengan \"git branch <nama-cabang>\", lalu pindah ke sana dengan \"git checkout <nama-cabang>\"",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Cabang (Branch)",
+              "Branch itu seperti **sticky note** yang kamu tempel di sebuah commit. Isinya cuma tulisan: \"aku lagi di sini\".",
+              "",
+              "Karena cuma tempelan, bikin branch itu super murah dan cepat. Tidak ada file yang dicopy sama sekali.",
+              "",
+              "Gunanya apa? Supaya kamu bisa mencoba ide baru tanpa merusak yang sudah jadi. Kalau idemu gagal, tinggal buang cabangnya. Kalau berhasil, gabungkan!",
+              "",
+              "Kata orang Git: **bikin branch sesering mungkin!**"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo bikin satu cabang baru namanya `newImage`."
+            ],
+            "afterMarkdowns": [
+              "Lihat, muncul tempelan baru bernama `newImage` di commit yang sama.",
+              "",
+              "Tapi tunggu -- tulisan `main` masih ada tanda bintang (*) nya. Artinya kamu **masih berdiri di main**, belum pindah ke cabang baru."
+            ],
+            "command": "git branch newImage",
+            "beforeCommand": ""
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Coba kita commit sekarang, dan perhatikan apa yang terjadi."
+            ],
+            "afterMarkdowns": [
+              "Tuh kan! Yang maju cuma `main`, sedangkan `newImage` diam di tempat.",
+              "",
+              "Itu karena kita belum pindah ke cabang `newImage`."
+            ],
+            "command": "git commit",
+            "beforeCommand": "git branch newImage"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Ayo pindah dulu ke cabang `newImage` pakai `git checkout`, baru commit."
+            ],
+            "afterMarkdowns": [
+              "Berhasil! Sekarang `newImage` yang maju, karena kita sudah berdiri di atasnya.",
+              "",
+              "Ada jalan pintas: `git checkout -b <nama>` langsung bikin cabang **dan** pindah ke sana sekaligus."
+            ],
+            "command": "git checkout newImage; git commit",
+            "beforeCommand": "git branch newImage"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Ingat ya",
+              "- `git branch <nama>` = bikin tempelan baru",
+              "- `git checkout <nama>` = pindah berdiri ke tempelan itu",
+              "- `git checkout -b <nama>` = bikin **dan** langsung pindah"
+            ]
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "Bikin cabang baru bernama `bugFix`, lalu pindah ke cabang itu.",
+              "",
+              "Selamat mencoba!"
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "merging": {
+    "name": "Menggabungkan Cabang",
+    "hint": "Ingat urutannya ya (bugFix dulu, baru main)",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Merge = Menggabungkan",
+              "Kamu sudah bisa bikin cabang dan pindah-pindah. Sekarang: bagaimana cara **menyatukan** pekerjaan dari dua cabang?",
+              "",
+              "Caranya pakai `git merge`. Merge membuat satu commit spesial yang punya **dua orang tua** sekaligus.",
+              "",
+              "Artinya commit itu berkata: \"aku berisi semua pekerjaan dari cabang ini, *dan* semua pekerjaan dari cabang itu.\""
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Coba lihat. Kita punya dua cabang yang jalannya berbeda. Ayo gabungkan `bugFix` ke dalam `main`."
+            ],
+            "afterMarkdowns": [
+              "Lihat commit baru itu -- panahnya ada **dua**! Satu ke `main` yang lama, satu ke `bugFix`.",
+              "",
+              "Sekarang `main` sudah berisi semua pekerjaan dari kedua cabang. Tapi `bugFix` belum, dia masih tertinggal."
+            ],
+            "command": "git merge bugFix",
+            "beforeCommand": "git checkout -b bugFix; git commit; git checkout main; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kalau kita mau `bugFix` juga ikut menyusul, tinggal merge lagi dari sisi sebaliknya."
+            ],
+            "afterMarkdowns": [
+              "Karena `main` sudah mengandung semua isi `bugFix`, Git tidak perlu bikin commit baru. Dia cuma **menggeser** tempelan `bugFix` maju ke depan.",
+              "",
+              "Ini namanya *fast-forward*. Sekarang kedua cabang sudah sama."
+            ],
+            "command": "git checkout bugFix; git merge main",
+            "beforeCommand": "git checkout -b bugFix; git commit; git checkout main; git commit; git merge bugFix"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "Buat cabang `bugFix`, commit sekali di sana, lalu kembali ke `main` dan commit sekali lagi.",
+              "",
+              "Terakhir, gabungkan `bugFix` ke dalam `main` dengan `git merge`.",
+              "",
+              "Perhatikan urutannya: commit di `bugFix` dulu, baru di `main`."
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "rebasing": {
+    "name": "Rebase: Pindah Rapi",
+    "hint": "Pastikan commit dari bugFix dulu ya",
+    "startDialog": {
+      "childViews": [
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Cara kedua: Rebase",
+              "Selain merge, ada cara lain untuk menyatukan pekerjaan: **rebase**.",
+              "",
+              "Rebase itu seperti mengangkat commit-mu, lalu menempelkannya lagi di tempat lain.",
+              "",
+              "Hasilnya? Riwayatnya jadi **satu garis lurus yang rapi**, seolah-olah kamu mengerjakannya berurutan dari awal.",
+              "",
+              "Enaknya: sejarahnya bersih dan gampang dibaca. Tapi hati-hati, commit lamanya disalin jadi commit baru!"
+            ]
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Kita lagi berdiri di `bugFix`. Ayo pindahkan pekerjaan kita supaya menempel di atas `main`."
+            ],
+            "afterMarkdowns": [
+              "Perhatikan! Commit kita disalin ke atas `main`, dan namanya jadi ada tanda petiknya (contoh: `C3'`).",
+              "",
+              "Tanda petik itu artinya: \"aku adalah salinan\". Isinya sama, tapi tempatnya baru."
+            ],
+            "command": "git rebase main",
+            "beforeCommand": "git commit; git checkout -b bugFix C1; git commit"
+          }
+        },
+        {
+          "type": "GitDemonstrationView",
+          "options": {
+            "beforeMarkdowns": [
+              "Sekarang `main` masih tertinggal di belakang. Ayo suruh dia menyusul."
+            ],
+            "afterMarkdowns": [
+              "Karena `bugFix` sudah di depan, `main` tinggal maju saja mengikutinya.",
+              "",
+              "Sekarang semuanya lurus rapi dalam satu garis!"
+            ],
+            "command": "git rebase bugFix",
+            "beforeCommand": "git commit; git checkout -b bugFix C1; git commit; git rebase main; git checkout main"
+          }
+        },
+        {
+          "type": "ModalAlert",
+          "options": {
+            "markdowns": [
+              "## Misi kamu",
+              "Bikin cabang `bugFix`, commit sekali di sana, lalu kembali ke `main` dan commit sekali lagi.",
+              "",
+              "Terus rebase `bugFix` ke atas `main`.",
+              "",
+              "Ingat: commit di `bugFix` dulu ya!"
+            ]
+          }
+        }
+      ]
+    }
+  },
+
+  "detachedHead": { "name": "HEAD yang Lepas", "hint": "Pakai nama (hash) commit-nya untuk membantu!" },
+  "relativeRefs": { "name": "Alamat Singkat (^)", "hint": "Ingat tanda topi (^) ya!" },
+  "relativeRefs2": { "name": "Alamat Singkat #2 (~)", "hint": "Kamu perlu memakai minimal satu nama commit langsung (hash) untuk level ini" },
+  "reversingChanges": { "name": "Membatalkan Perubahan", "hint": "Perhatikan, revert dan reset itu argumennya beda." },
+
+  "cherryPick": { "name": "Petik Ceri", "hint": "Ketik git cherry-pick lalu nama commit-nya!" },
+  "interactiveRebase": { "name": "Rebase Pilih Sendiri", "hint": "Kamu boleh pakai nama cabang atau alamat singkat (HEAD~) sebagai tujuan rebase" },
+  "staging": { "name": "Meja Persiapan", "hint": "Siapkan file dengan `git add <file>`, lalu simpan dengan `git commit`. Lakukan dua kali, satu file sekali jalan." },
+  "restore": { "name": "Batalin Pakai git restore", "hint": "Turunkan dari meja dengan `git restore --staged secret.env`, buang percobaannya dengan `git restore experiment.js`, lalu `git commit`." },
+
+  "grabbingOneCommit": { "name": "Ambil Satu Commit Saja", "hint": "Ingat, rebase interaktif atau cherry-pick adalah temanmu di sini" },
+  "jugglingCommits": { "name": "Main Sulap Commit", "hint": "Perintah pertamanya adalah git rebase -i HEAD~2" },
+  "jugglingCommits2": { "name": "Main Sulap Commit #2", "hint": "Jangan lupa majukan main ke perubahan yang terbaru!" },
+  "tags": { "name": "Tag: Penanda Permanen", "hint": "Kamu boleh checkout langsung ke commit-nya, atau cukup checkout ke tag-nya!" },
+  "describe": { "name": "Git Describe", "hint": "Cukup commit sekali di bugFix kalau kamu sudah siap lanjut" },
+
+  "manyRebases": { "name": "Rebase Berkali-kali", "hint": "Ingat, cara paling hemat mungkin dengan memajukan main di akhir saja..." },
+  "multipleParents": { "name": "Punya Dua Orang Tua", "hint": "Pakai `git branch bugWork` dengan commit tujuan untuk membuat penanda yang hilang." },
+  "selectiveRebase": { "name": "Cabang Mie Kusut", "hint": "Pastikan urutannya benar! one dulu, lalu two, baru three" },
+
+  "clone": { "name": "Menyalin Gudang", "hint": "Cukup git clone!" },
+  "remoteBranches": { "name": "Cabang di Seberang", "hint": "Perhatikan urutannya -- commit di main dulu!" },
+  "fetch": { "name": "Ambil Kabar (fetch)", "hint": "Cukup jalankan git fetch!" },
+  "pull": { "name": "Tarik Semua (pull)", "hint": "Cukup jalankan git pull!" },
+  "fakeTeamwork": { "name": "Pura-pura Ada Teman", "hint": "Ingat, kamu bisa menentukan berapa banyak commit yang dibuat" },
+  "push": { "name": "Kirim Kerjaan (push)", "hint": "Ingat, kamu harus clone dulu sebelum bisa push!" },
+  "fetchRebase": { "name": "Sejarah Bercabang Dua", "hint": "Perhatikan urutan dari gambar target" },
+  "lockedMain": { "name": "Main Dikunci", "hint": "Bikin cabang feature dari main lokal dulu, baru kembalikan main supaya sama dengan main milik origin" },
+
+  "pushManyFeatures": { "name": "Push Main!", "hint": "Ingat kamu selalu bisa memakai perintah undo atau reset" },
+  "mergeManyFeatures": { "name": "Merge Bareng Remote", "hint": "Perhatikan baik-baik gambar targetnya!" },
+  "tracking": { "name": "Melacak Cabang Remote", "hint": "Ingat ada dua cara untuk mengatur pelacakan remote!" },
+  "pushArgs": { "name": "Argumen git push", "hint": "Kamu selalu bisa melihat slide terakhir dengan tombol \"Misi\"" },
+  "pushArgs2": { "name": "Argumen git push -- Lanjutan!", "hint": "Perhatikan, nama commit-nya bisa tertukar!" },
+  "fetchArgs": { "name": "Argumen git fetch", "hint": "Perhatikan bagaimana nama commit bisa bertukar! Kamu bisa membaca slide lagi lewat tombol \"Misi\"" },
+  "sourceNothing": { "name": "Sumbernya Kosong", "hint": "Perintah branch dimatikan di level ini, jadi kamu harus pakai fetch!" },
+  "pullArgs": { "name": "Argumen git pull", "hint": "Ingat kamu bisa membuat cabang lokal baru lewat argumen fetch/pull" }
+}
