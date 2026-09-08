@@ -9,14 +9,43 @@ import { neon } from '@neondatabase/serverless';
  * means a database outage degrades to local play instead of a broken page.
  */
 
-export const databaseConfigured = Boolean(process.env.DATABASE_URL);
+/**
+ * Vercel's Postgres integrations do not agree on a variable name: Neon sets
+ * DATABASE_URL, the older Vercel Postgres set POSTGRES_URL, and some setups
+ * only expose the non-pooling variants. Accept all of them, preferring a
+ * pooled connection, so a correct database is never missed just because the
+ * dashboard named it something else.
+ */
+const CONNECTION_ENV_VARS = [
+  'DATABASE_URL',
+  'POSTGRES_URL',
+  'POSTGRES_PRISMA_URL',
+  'DATABASE_URL_UNPOOLED',
+  'POSTGRES_URL_NON_POOLING',
+] as const;
+
+function findConnectionString(): { name: string; value: string } | null {
+  for (const name of CONNECTION_ENV_VARS) {
+    const value = process.env[name];
+    if (value && value.trim()) return { name, value: value.trim() };
+  }
+  return null;
+}
+
+export const databaseConfigured = findConnectionString() !== null;
+
+/** Which variable supplied the connection. Never returns the value itself. */
+export function connectionSourceName(): string | null {
+  return findConnectionString()?.name ?? null;
+}
 
 type Sql = ReturnType<typeof neon>;
 let cached: Sql | null = null;
 
 export function getSql(): Sql | null {
-  if (!databaseConfigured) return null;
-  if (!cached) cached = neon(process.env.DATABASE_URL!);
+  const found = findConnectionString();
+  if (!found) return null;
+  if (!cached) cached = neon(found.value);
   return cached;
 }
 
